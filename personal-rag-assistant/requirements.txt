@@ -1,0 +1,12 @@
+langchain
+langchain-anthropic
+langchain-openai
+langchain-google-genai
+langchain-xai
+langchain-community
+langchain-chroma
+chromadb
+sentence-transformers
+pypdf
+streamlit
+python-dotenv
