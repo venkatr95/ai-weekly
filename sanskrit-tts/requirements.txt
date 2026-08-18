@@ -1,0 +1,8 @@
+torch
+torchaudio
+transformers==4.46.1
+soundfile
+accelerate
+ipykernel
+jupyter
+git+https://github.com/huggingface/parler-tts.git
