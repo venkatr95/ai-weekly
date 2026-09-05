@@ -8,6 +8,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 |---|---|---|
 | 1 | [structured-output-agent](./structured-output-agent/) | Converts natural-language support messages into validated `SupportTicket` objects using Pydantic schema enforcement and LLM retry logic |
 | 2 | [personal-rag-assistant](./personal-rag-assistant/) | Local RAG chatbot over personal documents (PDF, TXT, MD) with conversational memory and incremental indexing |
+| 3 | [sanskrit-tts](./sanskrit-tts/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script |
 
 ## Style
 
