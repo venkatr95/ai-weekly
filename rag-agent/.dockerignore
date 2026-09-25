@@ -1,0 +1,8 @@
+.venv
+venv
+__pycache__
+.pytest_cache
+.env
+*.egg-info
+.git
+evaluation/metrics.json
