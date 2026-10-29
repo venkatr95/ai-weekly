@@ -5,7 +5,7 @@ from pathlib import Path
 from evidence_agent.embeddings import HttpEmbedder, LocalHashingEmbedder
 from evidence_agent.errors import CorruptIndexError, IndexNotFoundError
 from evidence_agent.pipeline import ResearchPipeline
-from helpers import build_settings, indexed_pipeline, write_corpus
+from helpers import build_settings, write_corpus
 from pdf_util import write_text_pdf
 import pytest
 

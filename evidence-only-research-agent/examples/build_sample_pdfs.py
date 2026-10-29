@@ -116,7 +116,6 @@ def write_scanned_pdf(path: Path) -> None:
         document.save(path)
     finally:
         document.close()
-        pixmap = None
 
 
 def main() -> None:

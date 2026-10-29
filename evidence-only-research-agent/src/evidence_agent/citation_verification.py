@@ -110,24 +110,35 @@ def verify_answer(
     citations: list[Citation] = []
     kept_claims: list[Claim] = []
     dropped = 0
+    accepted: dict[tuple[str, str, int | None, str, str], str | None] = {}
 
     def take(draft_citation: DraftCitation, claim_text: str, evidence_status: str) -> str | None:
+        key = (
+            draft_citation.chunk_id,
+            normalize_ws(draft_citation.excerpt),
+            draft_citation.page,
+            normalize_ws(claim_text),
+            evidence_status,
+        )
+        if key in accepted:
+            return accepted[key]
         chunk = chunks_by_id.get(draft_citation.chunk_id)
-        valid, supports, reason = assess_citation(
+        valid, supports, _reason = assess_citation(
             chunk,
             draft_citation,
             claim_text,
             evidence_status,
             settings.support_threshold,
         )
-        if not valid or not supports:
+        if not valid or not supports or chunk is None:
+            accepted[key] = None
             return None
         citation_id = f"cit-{len(citations) + 1}"
         citations.append(
             Citation(
                 id=citation_id,
                 chunk_id=draft_citation.chunk_id,
-                source_path=chunk.relative_path if chunk else "",
+                source_path=chunk.relative_path,
                 page=draft_citation.page,
                 excerpt=normalize_ws(draft_citation.excerpt),
                 valid=True,
@@ -135,6 +146,7 @@ def verify_answer(
                 rejection_reason=None,
             )
         )
+        accepted[key] = citation_id
         return citation_id
 
     for draft_claim in draft.claims:

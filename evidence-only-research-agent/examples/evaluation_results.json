@@ -8,7 +8,7 @@
   "abstention_recall": 1.0,
   "conflict_recall": 1.0,
   "conflict_false_positive_rate": 0.0,
-  "mean_latency_seconds": 0.007523099990794435,
+  "mean_latency_seconds": 0.007487669988768176,
   "provider": "extractive",
   "retrieval_k": 6,
   "notes": [
@@ -36,7 +36,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.025157299998681992
+      "latency_seconds": 0.027530200022738427
     },
     {
       "id": "q_sample_size",
@@ -54,7 +54,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": true,
-      "latency_seconds": 0.0052494999836198986
+      "latency_seconds": 0.006005299976095557
     },
     {
       "id": "q_minutes",
@@ -74,7 +74,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": true,
-      "latency_seconds": 0.005630500032566488
+      "latency_seconds": 0.005551400012336671
     },
     {
       "id": "q_partial",
@@ -82,7 +82,6 @@
       "retrieved_sources": [
         "study_a_rivera_2024.pdf",
         "study_b_okonkwo_2023.pdf",
-        "methods_glossary.txt",
         "study_c_halvorsen_2024.pdf"
       ],
       "recall_hit": true,
@@ -95,7 +94,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.005890899978112429
+      "latency_seconds": 0.006021799985319376
     },
     {
       "id": "q_unanswerable",
@@ -116,7 +115,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.003342099953442812
+      "latency_seconds": 0.003873899986501783
     },
     {
       "id": "q_conflict",
@@ -136,7 +135,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.007024899998214096
+      "latency_seconds": 0.005834799958392978
     },
     {
       "id": "q_limitations",
@@ -156,7 +155,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.006254600011743605
+      "latency_seconds": 0.006110699963755906
     },
     {
       "id": "q_rent",
@@ -174,7 +173,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.005585999984759837
+      "latency_seconds": 0.0047839999897405505
     },
     {
       "id": "q_unicode",
@@ -193,15 +192,14 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.0060683999909088016
+      "latency_seconds": 0.004737100040074438
     },
     {
       "id": "q_injection",
       "type": "answerable",
       "retrieved_sources": [
         "site_record.md",
-        "study_a_rivera_2024.pdf",
-        "methods_glossary.txt"
+        "study_a_rivera_2024.pdf"
       ],
       "recall_hit": true,
       "citation_validity": 1.0,
@@ -213,7 +211,7 @@
       "conflict_correct": true,
       "forbidden_hit": false,
       "page_correct": null,
-      "latency_seconds": 0.0050267999758943915
+      "latency_seconds": 0.004427499952726066
     }
   ]
 }

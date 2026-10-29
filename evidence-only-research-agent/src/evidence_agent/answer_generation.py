@@ -61,7 +61,7 @@ class ExtractiveGenerator:
             if len(terms) < 2:
                 unanswered.append(
                     DraftUnanswered(
-                        question=subquestion,
+                        question=_present_question(subquestion),
                         reason="ambiguous_wording",
                         detail="The question does not contain enough specific terms to search the documents.",
                     )
@@ -72,7 +72,7 @@ class ExtractiveGenerator:
                 shown = ", ".join(missing_tokens[:8])
                 unanswered.append(
                     DraftUnanswered(
-                        question=subquestion,
+                        question=_present_question(subquestion),
                         reason="missing_documents",
                         detail=f"No indexed passage contains these question terms: {shown}.",
                     )
@@ -86,7 +86,7 @@ class ExtractiveGenerator:
             if not sub_passages:
                 unanswered.append(
                     DraftUnanswered(
-                        question=subquestion,
+                        question=_present_question(subquestion),
                         reason="insufficient_retrieval",
                         detail="No indexed passage scored above the similarity threshold for this subquestion.",
                     )
@@ -96,7 +96,7 @@ class ExtractiveGenerator:
             if not candidates:
                 unanswered.append(
                     DraftUnanswered(
-                        question=subquestion,
+                        question=_present_question(subquestion),
                         reason="insufficient_evidence",
                         detail="Passages were retrieved, but no sentence overlaps this subquestion enough to support a claim.",
                     )
@@ -297,6 +297,17 @@ def draft_from_model_json(question: str, payload: dict, provider: str) -> Answer
         limitations=[],
         provider=provider,
     )
+
+
+def _present_question(text: str) -> str:
+    cleaned = text.strip()
+    if not cleaned:
+        return cleaned
+    if cleaned[0].islower():
+        cleaned = cleaned[0].upper() + cleaned[1:]
+    if cleaned[-1] not in "?.!":
+        cleaned += "?"
+    return cleaned
 
 
 def _citations(raw) -> list[DraftCitation]:
