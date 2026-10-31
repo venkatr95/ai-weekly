@@ -1,0 +1,123 @@
+{
+  "question": "What were the results of the company's 2025 financial performance?",
+  "overall_assessment": "The answer contains supported, partially supported, and contradicted claims.",
+  "summary": {
+    "total_claims": 4,
+    "supported": 1,
+    "partially_supported": 1,
+    "contradicted": 2,
+    "unsupported": 0,
+    "unverifiable": 0,
+    "factual_claims": 4,
+    "evidence_coverage": 25.0
+  },
+  "claims": [
+    {
+      "claim_id": "C001",
+      "text": "The company generated €120 million in revenue in 2025.",
+      "claim_type": "factual",
+      "status": "supported",
+      "explanation": "S1 (Annual report) states €120 million for revenue.",
+      "supporting_evidence": [
+        {
+          "source_id": "S1",
+          "quote": "Revenue for 2025 amounted to €120 million, compared with €100 million in 2024.",
+          "page": null,
+          "source_title": "Annual report"
+        }
+      ],
+      "contradicting_evidence": [],
+      "verification_notes": [],
+      "sentence_index": 1,
+      "paragraph_index": 1,
+      "original_sentence": "The company generated €120 million in revenue in 2025."
+    },
+    {
+      "claim_id": "C002",
+      "text": "Revenue increased by 25% compared with 2024.",
+      "claim_type": "factual",
+      "status": "contradicted",
+      "explanation": "S1 (Annual report) reports €120 million in 2025 compared with €100 million in 2024. That is a 20% increase, which conflicts with the claimed 25%.",
+      "supporting_evidence": [],
+      "contradicting_evidence": [
+        {
+          "source_id": "S1",
+          "quote": "Revenue for 2025 amounted to €120 million, compared with €100 million in 2024.",
+          "page": null,
+          "source_title": "Annual report"
+        }
+      ],
+      "verification_notes": [],
+      "sentence_index": 2,
+      "paragraph_index": 1,
+      "original_sentence": "Revenue increased by 25% compared with 2024."
+    },
+    {
+      "claim_id": "C003",
+      "text": "The company also achieved a net profit of €18 million.",
+      "claim_type": "factual",
+      "status": "contradicted",
+      "explanation": "S2 (Financial statement) states €15 million, which conflicts with the claimed €18 million.",
+      "supporting_evidence": [],
+      "contradicting_evidence": [
+        {
+          "source_id": "S2",
+          "quote": "Net profit for the financial year was €15 million.",
+          "page": null,
+          "source_title": "Financial statement"
+        }
+      ],
+      "verification_notes": [],
+      "sentence_index": 3,
+      "paragraph_index": 1,
+      "original_sentence": "The company also achieved a net profit of €18 million and expanded its workforce by 15%."
+    },
+    {
+      "claim_id": "C004",
+      "text": "The company expanded its workforce by 15%.",
+      "claim_type": "factual",
+      "status": "partially_supported",
+      "explanation": "S3 (Workforce report) reports 460 in 2025 compared with 400 in 2024. That is a 15% increase. The percentage is calculated from those figures and is not stated in the source.",
+      "supporting_evidence": [
+        {
+          "source_id": "S3",
+          "quote": "The company employed 460 people at the end of 2025, compared with 400 in 2024.",
+          "page": null,
+          "source_title": "Workforce report"
+        }
+      ],
+      "contradicting_evidence": [],
+      "verification_notes": [
+        "The percentage is implied by the source figures and is not stated directly."
+      ],
+      "sentence_index": 3,
+      "paragraph_index": 1,
+      "original_sentence": "The company also achieved a net profit of €18 million and expanded its workforce by 15%."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "S1",
+      "title": "Annual report",
+      "path": "examples/sources/source1.txt",
+      "file_type": "txt",
+      "page_count": null
+    },
+    {
+      "source_id": "S2",
+      "title": "Financial statement",
+      "path": "examples/sources/source2.txt",
+      "file_type": "txt",
+      "page_count": null
+    },
+    {
+      "source_id": "S3",
+      "title": "Workforce report",
+      "path": "examples/sources/source3.txt",
+      "file_type": "txt",
+      "page_count": null
+    }
+  ],
+  "warnings": [],
+  "provider": "heuristic"
+}
