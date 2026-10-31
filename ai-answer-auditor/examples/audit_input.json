@@ -1,0 +1,21 @@
+{
+  "question": "What were the results of the company's 2025 financial performance?",
+  "answer": "The company generated €120 million in revenue in 2025. Revenue increased by 25% compared with 2024. The company also achieved a net profit of €18 million and expanded its workforce by 15%.",
+  "sources": [
+    {
+      "source_id": "S1",
+      "title": "Annual report",
+      "text": "Revenue for 2025 amounted to €120 million, compared with €100 million in 2024."
+    },
+    {
+      "source_id": "S2",
+      "title": "Financial statement",
+      "text": "Net profit for the financial year was €15 million."
+    },
+    {
+      "source_id": "S3",
+      "title": "Workforce report",
+      "text": "The company employed 460 people at the end of 2025, compared with 400 in 2024."
+    }
+  ]
+}
