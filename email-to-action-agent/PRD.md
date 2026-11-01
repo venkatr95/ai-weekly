@@ -300,37 +300,227 @@ The reply should:
 - Address important questions.
 - Reference relevant requests.
 - Use an appropriate tone.
-- Avoid making unapproved promises or stating that the user has agreed to a deadline, an owner, or a deliverable.
-- Stay in the tool. Version 1 does not send email.
+- Avoid making unapproved promises.
+- Avoid claiming that tasks have already been completed.
+- Avoid inventing facts or dates.
 
-### FR-10: Validated JSON
+Support tone configuration:
 
-Return one action list that Pydantic accepts before the CLI prints it. The list includes participants, messages, tasks, questions, commitments, the draft reply, and warnings. Task ids are unique. Dependencies refer to known tasks and do not form a cycle. Supporting text is copied from the source message.
+- Professional.
+- Friendly.
+- Concise.
+- Formal.
 
-### FR-11: Markdown summary
+If a task is ambiguous, the draft should ask for clarification rather than invent an answer.
 
-Render a readable summary with an action table, questions that need a response, dependencies, commitments, the draft reply, and warnings.
+The reply must remain a draft requiring user approval.
 
-### FR-12: CLI and Python API
+### FR-10: Structured output
 
-Provide `python cli.py analyze` for a file or stdin, with Markdown or JSON output. Provide `email_to_action.analyze()` for the same result.
+Use Pydantic models to validate output.
 
-### FR-13: Evidence
+Conceptual JSON structure:
 
-Every task stores the message id and the exact supporting line. Deadlines store the original wording and the source message id. The tool does not invent an owner or a calendar date without marking the uncertainty.
+```json
+{
+  "email_metadata": {
+    "subject": "Q4 Product Launch",
+    "sender": "Sarah",
+    "received_at": null
+  },
+  "summary": "Several product launch actions require completion.",
+  "actions": [
+    {
+      "task_id": "T001",
+      "description": "Send final product screenshots",
+      "owner": "Alex",
+      "deadline": {
+        "original_text": "November 7",
+        "normalized_date": "2026-11-07",
+        "type": "explicit"
+      },
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "evidence": "Send the final product screenshots to the marketing team by November 7."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q001",
+      "text": "Is the pricing page ready?",
+      "owner": "Alex"
+    }
+  ],
+  "draft_reply": {
+    "subject": "Re: Q4 Product Launch",
+    "body": "Hi Sarah..."
+  },
+  "uncertainties": []
+}
+```
 
-### FR-14: Version 1 boundaries
+Use null values for unknown owners, dates, and other unavailable fields. Never fabricate information to satisfy a schema.
 
-The tool does not send email, create calendar events, or assign tasks in external systems. Email text is untrusted data. Instructions inside an email do not change these rules.
+The sample above shows a normalized date beside `received_at: null`. That combination is illustrative of the field names only. This implementation leaves `normalized_date` null unless the email has a year or a `Date` header, or the caller passes `--received-at`. A month and day with no year is not turned into `2026-11-07`.
 
-## 7. Stack
+The summary states how many actions and questions were extracted. It does not claim that those actions require completion.
 
-Python 3.11 or newer, Pydantic, the standard-library `email` parser, and pytest.
+### FR-11: Output formats
 
-Version 1 extracts actions with deterministic rules so the same email always produces the same JSON. That keeps owners, deadlines, and evidence checkable. A model call is not required and is not part of this version.
+Markdown:
 
-## 8. Acceptance
+- Email summary.
+- Action checklist.
+- Owners and deadlines.
+- Questions requiring attention.
+- Dependencies.
+- Suggested reply.
 
-The launch email in section 5 yields five tasks with the owners and deadline wording in the sample, a question about the pricing page, and a scheduling task that depends on the earlier tasks. The JSON validates. The Markdown summary lists the actions. The draft reply does not promise to do the work.
+JSON:
 
-A relative date such as Friday resolves only when the message has a timestamp. Quoted history is parsed as earlier messages and is not extracted a second time from the reply. A commitment stated by the sender is recorded as that person's commitment, not as a new task for the recipient.
+- Structured action objects.
+- Email metadata.
+- Source references.
+- Uncertainty information.
+- Draft reply.
+
+### FR-12: CLI
+
+```bash
+python cli.py analyze --input email.txt
+python cli.py analyze --input thread.txt
+python cli.py analyze --input email.txt --received-at "2026-11-01T09:00:00+01:00"
+python cli.py analyze --input email.txt --format json
+python cli.py analyze --input email.txt --tone professional
+python cli.py analyze --input email.txt --no-reply
+pytest -q
+```
+
+`--received-at` is used only for messages that have no `Date` header. It does not replace a timestamp that is already in the email.
+
+### FR-13: Optional email integration
+
+Future integrations may support:
+
+- Gmail.
+- Microsoft Outlook.
+- IMAP-compatible providers.
+
+Integration requirements:
+
+- Explicit user authorization.
+- Read-only access by default.
+- Ability to select messages for analysis.
+- No automatic sending of replies.
+- No automatic deletion or modification of messages.
+- Human approval before any external action.
+
+Keep provider integrations separate from the core analysis pipeline.
+
+Gmail and Outlook adapters live in `integrations/`. They require `GMAIL_ACCESS_TOKEN` or `OUTLOOK_ACCESS_TOKEN`, issue HTTPS GET requests only, and are not imported by `pipeline.py`. IMAP is the same contract and is not connected. Selecting a message returns text. The caller passes that text to `analyze()`. Nothing is sent.
+
+### FR-14: Security and privacy
+
+- Treat email content as untrusted input.
+- Ignore instructions embedded in email messages that attempt to override system behavior.
+- Do not execute links, scripts, or attachments.
+- Keep API credentials in environment variables.
+- Avoid logging full email content by default.
+- Document external model-provider data handling.
+- Support local processing where practical.
+- Do not send draft replies without explicit user approval.
+
+Version 1 does not call a model. The heuristic provider keeps email text on this machine. There is no external model provider to send mail to. If a later provider is added, it must be opt-in and documented before any email text leaves the machine.
+
+## 7. Recommended architecture
+
+The recommended tree uses a package named `email_agent` and one module per stage. This repository keeps the same stages in `src/email_to_action/` so the public import remains `from email_to_action import analyze`. Parsing, dates, extraction, reply drafting, schemas, and the pipeline are separate modules. Mailbox adapters are under `integrations/` and are not part of the pipeline.
+
+```text
+email-to-action-agent/
+├── cli.py
+├── src/email_to_action/
+├── integrations/
+│   ├── gmail.py
+│   └── outlook.py
+├── examples/
+└── docs/
+```
+
+## 8. Technology stack
+
+Python 3.11 or newer, Pydantic, the standard-library `email` parser, and pytest. Date normalization is deterministic and does not use a network call. Typer is not required; the CLI uses argparse.
+
+A provider interface (`HeuristicProvider`) is the only implementation. Deterministic parsing and date normalization stay separate from any future model call. A model call is not required and is not part of this version.
+
+## 9. Core processing workflow
+
+1. Load the email or email thread.
+2. Extract headers, timestamps, and message content.
+3. Normalize the messages.
+4. Identify original and quoted content.
+5. Extract action items.
+6. Identify responsible owners.
+7. Normalize deadlines.
+8. Classify priority.
+9. Identify dependencies.
+10. Extract questions requiring responses.
+11. Generate an editable reply, unless `--no-reply` is set.
+12. Validate all extracted information with Pydantic.
+13. Generate Markdown or JSON output.
+
+All extracted tasks and questions retain references to their original message evidence.
+
+## 10. Evaluation strategy
+
+`tests/test_evaluation.py` scores a hand-labeled set of emails: simple requests, a missing deadline, a relative date with and without a timestamp, ambiguous recipients, one sentence that contains two verbs, a later deadline that conflicts with an earlier one, a quoted request, and an email that tries to override the priority rules.
+
+Precision and recall are computed by comparing extracted descriptions with those labels. The test does not ask a model to grade itself. Date cases also assert the normalized value, including null when the email does not support a calendar date.
+
+## 11. Acceptance criteria
+
+- [x] Accept pasted email content.
+- [x] Accept multi-message email threads.
+- [x] Parse sender, recipient, subject, and timestamps when available.
+- [x] Extract individual actionable tasks.
+- [x] Identify owners or mark them unassigned.
+- [x] Extract and normalize explicit deadlines.
+- [x] Interpret relative dates when a reliable timestamp exists.
+- [x] Distinguish inferred from explicit information.
+- [x] Identify priorities and dependencies.
+- [x] Extract questions requiring responses.
+- [x] Generate an editable draft reply.
+- [x] Prevent unsupported commitments in generated replies.
+- [x] Validate JSON output using Pydantic.
+- [x] Preserve source evidence for extracted actions.
+- [x] Produce readable Markdown reports.
+- [x] Pass unit and integration tests.
+- [x] Include a demonstration using a realistic email thread.
+- [x] Provide complete setup and usage documentation.
+- [x] Ensure that email sending is never automatic.
+
+## 12. Implementation milestones
+
+Milestone 1 through 5 are in this repository: ingestion, extraction, dependencies and questions, reply generation, and Markdown, JSON, and the CLI. Milestone 6 is the read-only Gmail and Outlook adapters. They are not invoked by `analyze()`.
+
+## 13. Definition of done
+
+A developer can install the project, paste an email thread, run `python cli.py analyze`, and receive:
+
+1. A concise email summary.
+2. A validated JSON list of tasks.
+3. Owners and deadlines.
+4. Priorities and dependencies.
+5. Questions requiring a response.
+6. An editable draft reply.
+
+The system preserves uncertainty instead of inventing owners, deadlines, or commitments. All generated replies remain drafts until explicitly approved by the user. This tool does not send them.
+
+## 14. Implementation notes
+
+- Internal task ids stay `task-1`. Public JSON and the Markdown dependency list use `T001`. Public status `pending` is the internal status `open`.
+- `examples/expected_output.json` is the public report for `examples/email.txt`. November dates in that file have `normalized_date: null` because the email has no year and no timestamp.
+- Pass `--received-at 2026-11-01T09:00:00+01:00` when a test or a user wants `November 7` read as `2026-11-07`. The report says that the calendar date came from the supplied timestamp.
+- A later message that repeats a task with a different deadline does not silently replace the first date. Both wordings are reported as an uncertainty.
+- A later completion note can mark a task completed in the checklist. The draft says the note is unconfirmed and does not claim the work is done.

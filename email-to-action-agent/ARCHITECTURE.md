@@ -41,10 +41,16 @@ A later message can mark an earlier task completed or blocked when the sentence 
 
 ## Reply and report
 
-`reply.py` writes a draft to the latest sender and signs it with the addressee when that person is known. The action-list validator rejects a draft that promises the work or sets `accepts_commitments` to true.
+`reply.py` writes a draft to the latest sender and signs it with the addressee when that person is known. The tone is professional, friendly, concise, or formal. Ambiguous owners and dates become questions in the draft. A task marked completed is described as unconfirmed. The validator rejects a draft that promises the work, claims it is already done, or sets `accepts_commitments` to true.
 
-`report.py` renders the summary table, questions, dependencies, commitments, priority notes, and the draft. JSON is the validated model.
+`report.py` renders the email summary, checklist, owners, questions, dependencies, and the draft. `render_json` validates a public report: metadata, summary, `T001` actions, questions, uncertainties, source lines, and the draft. An open task is `pending` in that JSON. A missing owner or a missing calendar date is null.
+
+`--received-at` is passed into the extractor as a fallback clock. Messages that already have `date_iso` keep that clock.
+
+## Integrations
+
+`integrations/gmail.py` and `integrations/outlook.py` list and read messages over HTTPS GET. The pipeline does not import them. They require an access token and have no send or delete method.
 
 ## What version 1 does not do
 
-It does not send mail, create calendar events, or call a model. Email text is data. Instructions inside the email do not change these rules.
+It does not send mail, create calendar events, or call a model. `providers.py` exposes `HeuristicProvider` as the only extractor. Email text is data. Instructions inside the email do not change these rules.

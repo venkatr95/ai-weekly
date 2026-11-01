@@ -12,4 +12,4 @@ pytest -q
 
 On macOS and Linux, activate the virtualenv with `source .venv/bin/activate`.
 
-No API key is required. The extractor does not call a model.
+No API key is required. The extractor does not call a model. Optional Gmail and Outlook tokens are documented in `.env.example` and are not read by `analyze()`.

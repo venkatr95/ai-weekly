@@ -39,19 +39,36 @@ def build_parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument("--input", type=Path, help="Plain-text email or .eml file. Reads stdin when omitted.")
     analyze_parser.add_argument("--format", choices=("markdown", "json"), default="markdown")
     analyze_parser.add_argument("--output", type=Path, help="Write the report to this path as well as stdout.")
+    analyze_parser.add_argument(
+        "--received-at",
+        dest="received_at",
+        help="ISO-8601 timestamp used only when a message has no Date header, for example 2026-11-01T09:00:00+01:00.",
+    )
+    analyze_parser.add_argument(
+        "--tone",
+        choices=("professional", "friendly", "concise", "formal"),
+        default="professional",
+        help="Tone of the draft reply. The reply stays a draft.",
+    )
+    analyze_parser.add_argument("--no-reply", action="store_true", help="Extract actions without a draft reply.")
     analyze_parser.add_argument("--verbose", "-v", action="count", default=0)
     analyze_parser.set_defaults(handler=command_analyze)
     return parser
 
 
 def command_analyze(args: argparse.Namespace) -> int:
+    kwargs = {
+        "received_at": args.received_at,
+        "tone": args.tone,
+        "include_reply": not args.no_reply,
+    }
     if args.input:
-        action = analyze(args.input)
+        action = analyze(args.input, **kwargs)
     else:
         text = sys.stdin.read()
         if not text.strip():
             raise EmailActionError("No email text on stdin.")
-        action = analyze(text)
+        action = analyze(text, **kwargs)
     rendered = render_json(action) if args.format == "json" else render_markdown(action)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

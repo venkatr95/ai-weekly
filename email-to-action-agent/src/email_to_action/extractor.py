@@ -121,7 +121,7 @@ class _QuestionDraft:
     kind: QuestionKind
 
 
-def extract(messages: list[EmailMessage]) -> Extraction:
+def extract(messages: list[EmailMessage], received_at: datetime | None = None) -> Extraction:
     drafts: list[_Draft] = []
     question_drafts: list[_QuestionDraft] = []
     for message in messages:
@@ -147,22 +147,23 @@ def extract(messages: list[EmailMessage]) -> Extraction:
             context.append(line)
             _collect_questions(question_drafts, line, message, message.addressee_name)
 
-    drafts = _dedupe(drafts)
+    drafts, duplicate_notes = _dedupe(drafts)
     result = Extraction()
+    result.warnings.extend(duplicate_notes)
     task_index = 0
     commitment_index = 0
     for draft in drafts:
         if draft.commitment:
             commitment_index += 1
-            result.commitments.append(_commitment(draft, commitment_index))
+            result.commitments.append(_commitment(draft, commitment_index, received_at))
         else:
             task_index += 1
-            result.tasks.append(_task(draft, task_index, result.warnings))
+            result.tasks.append(_task(draft, task_index, result.warnings, received_at))
     result.questions = _questions(question_drafts)
     _link_questions(result.tasks, result.questions)
     _infer_dates(result.tasks)
     result.warnings.extend(_link_dependencies(result.tasks))
-    _apply_status(messages, result.tasks)
+    _apply_status(messages, result.tasks, result.warnings)
     _break_cycles(result.tasks, result.warnings)
     return result
 
@@ -271,8 +272,8 @@ def _add_task(
     )
 
 
-def _task(draft: _Draft, index: int, warnings: list[str]) -> Task:
-    reference = _reference(draft.message)
+def _task(draft: _Draft, index: int, warnings: list[str], received_at: datetime | None = None) -> Task:
+    reference = _reference(draft.message, received_at)
     deadline = resolve_deadline(draft.wording, draft.hint, reference, draft.message.message_id)
     owner = _owner(draft, draft.message)
     dated = deadline.kind == DeadlineKind.explicit and deadline.precision in _DATED
@@ -281,6 +282,16 @@ def _task(draft: _Draft, index: int, warnings: list[str]) -> Task:
     if deadline.kind == DeadlineKind.unresolved and deadline.original_wording:
         warnings.append(
             f"{task_id} has relative deadline \"{deadline.original_wording}\" and the message has no timestamp."
+        )
+    if (
+        received_at is not None
+        and not draft.message.date_iso
+        and deadline.normalized_date
+        and deadline.kind == DeadlineKind.explicit
+    ):
+        warnings.append(
+            f"{task_id} normalized \"{deadline.original_wording}\" using the supplied received-at timestamp. "
+            "The email did not include that calendar date."
         )
     if owner.ambiguous:
         warnings.append(f"{task_id} owner is ambiguous.")
@@ -298,8 +309,8 @@ def _task(draft: _Draft, index: int, warnings: list[str]) -> Task:
     )
 
 
-def _commitment(draft: _Draft, index: int) -> Commitment:
-    reference = _reference(draft.message)
+def _commitment(draft: _Draft, index: int, received_at: datetime | None = None) -> Commitment:
+    reference = _reference(draft.message, received_at)
     deadline = None
     if draft.wording:
         deadline = resolve_deadline(draft.wording, draft.hint, reference, draft.message.message_id)
@@ -461,8 +472,9 @@ def _link_dependencies(tasks: list[Task]) -> list[str]:
     return warnings
 
 
-def _apply_status(messages: list[EmailMessage], tasks: list[Task]) -> None:
+def _apply_status(messages: list[EmailMessage], tasks: list[Task], warnings: list[str]) -> None:
     order = {message.message_id: index for index, message in enumerate(messages)}
+    before = {task.task_id: task.status for task in tasks}
     for message in messages:
         for sentence in re.split(r"(?<=[.!?])\s+|\n+", message.body):
             sentence = sentence.strip()
@@ -470,6 +482,17 @@ def _apply_status(messages: list[EmailMessage], tasks: list[Task]) -> None:
                 continue
             _mark_completed(sentence, message, tasks, order)
             _mark_blocked(sentence, message, tasks, order)
+    for task in tasks:
+        if task.status == before[task.task_id]:
+            continue
+        if task.status == TaskStatus.completed:
+            warnings.append(
+                f"{task.task_id} is marked completed from a later message. Confirm that before treating it as done."
+            )
+        elif task.status == TaskStatus.blocked:
+            warnings.append(
+                f"{task.task_id} is marked blocked from a later message. Confirm that before treating it as settled."
+            )
 
 
 def _mark_completed(sentence: str, message: EmailMessage, tasks: list[Task], order: dict[str, int]) -> None:
@@ -642,22 +665,31 @@ def _is_preamble(line: str, following: list[str]) -> bool:
     return any(_INTRO.match(item) or _BULLET.match(item) or _NAMED.match(item) or _LETS.match(item) or re.search(r"\bplease\b", item, re.IGNORECASE) for item in following)
 
 
-def _reference(message: EmailMessage) -> datetime | None:
-    if not message.date_iso:
-        return None
-    try:
-        return datetime.fromisoformat(message.date_iso)
-    except ValueError:
-        return None
+def _reference(message: EmailMessage, received_at: datetime | None = None) -> datetime | None:
+    if message.date_iso:
+        try:
+            return datetime.fromisoformat(message.date_iso)
+        except ValueError:
+            pass
+    return received_at
 
 
-def _dedupe(drafts: list[_Draft]) -> list[_Draft]:
+def _dedupe(drafts: list[_Draft]) -> tuple[list[_Draft], list[str]]:
     kept: list[_Draft] = []
+    notes: list[str] = []
     for draft in drafts:
-        if any(_same_action(draft, earlier) for earlier in kept):
+        earlier = next((item for item in kept if _same_action(draft, item)), None)
+        if earlier is None:
+            kept.append(draft)
             continue
-        kept.append(draft)
-    return kept
+        later = draft.wording or ""
+        first = earlier.wording or ""
+        if not draft.commitment and later.lower() != first.lower():
+            notes.append(
+                f"\"{earlier.description}\" is restated with deadline \"{later or 'no deadline'}\" "
+                f"after \"{first or 'no deadline'}\". Neither date replaces the other."
+            )
+    return kept, notes
 
 
 def _same_action(left: _Draft, right: _Draft) -> bool:

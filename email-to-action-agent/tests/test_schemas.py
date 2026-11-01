@@ -64,6 +64,16 @@ def test_reply_cannot_promise_the_work():
         _action([_task()], reply="I'll send the report by Friday.")
 
 
+def test_reply_cannot_claim_the_work_is_already_done():
+    with pytest.raises(ValidationError):
+        _action([_task()], reply="I already sent the report.")
+
+
+def test_reply_can_be_omitted():
+    action = ActionList(messages=[_message()], tasks=[_task()], draft_reply=None)
+    assert action.draft_reply is None
+
+
 def test_reply_cannot_flag_itself_as_accepting_commitments():
     with pytest.raises(ValidationError):
         ActionList(

@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import logging
 import re
+from datetime import datetime
 from pathlib import Path
 
 from email_to_action.config import Settings
 from email_to_action.errors import EmailActionError
-from email_to_action.extractor import extract
 from email_to_action.parser import parse_eml, parse_text
+from email_to_action.providers import get_provider
 from email_to_action.reply import build_reply
 from email_to_action.schemas import ActionList, EmailMessage, Participant, Task
 from email_to_action.security import check_size
@@ -18,8 +19,19 @@ logger = logging.getLogger("email_to_action")
 _TEAM = re.compile(r"\b([A-Za-z]+(?:\s+[A-Za-z]+)?\s+team)\b", re.IGNORECASE)
 
 
-def analyze(source: str | Path, settings: Settings | None = None) -> ActionList:
+def analyze(
+    source: str | Path,
+    settings: Settings | None = None,
+    *,
+    received_at: str | None = None,
+    tone: str = "professional",
+    include_reply: bool = True,
+) -> ActionList:
+    """Analyze an email. Mailbox integrations are not called from this pipeline."""
     settings = settings or Settings()
+    if tone not in {"professional", "friendly", "concise", "formal"}:
+        raise EmailActionError("tone must be professional, friendly, concise, or formal.")
+    reference = _parse_received_at(received_at) if received_at is not None else None
     payload = _load(source, settings)
     if isinstance(payload, bytes):
         check_size(payload.decode("utf-8", errors="replace"), settings.max_chars)
@@ -31,11 +43,18 @@ def analyze(source: str | Path, settings: Settings | None = None) -> ActionList:
         messages, warnings = parse_text(payload)
     if not messages:
         raise EmailActionError("No email message was found in the input.")
-    extracted = extract(messages)
+    extracted = get_provider(settings.provider).extract(messages, received_at=reference)
     warnings.extend(extracted.warnings)
     for message in messages:
         warnings.extend(message.warnings)
-    reply = build_reply(messages, extracted.tasks, extracted.questions, extracted.commitments)
+    if reference is not None and any(not message.date_iso for message in messages):
+        warnings.append(
+            "Messages without a Date header use the supplied received-at timestamp for relative dates. "
+            "That timestamp is not text from the email."
+        )
+    reply = None
+    if include_reply:
+        reply = build_reply(messages, extracted.tasks, extracted.questions, extracted.commitments, tone=tone)
     action = ActionList(
         subject=next((message.subject for message in messages if message.subject), None),
         participants=_participants(messages, extracted.tasks),
@@ -45,6 +64,7 @@ def analyze(source: str | Path, settings: Settings | None = None) -> ActionList:
         commitments=extracted.commitments,
         draft_reply=reply,
         warnings=_unique(warnings),
+        reference_timestamp=reference.isoformat() if reference else None,
     )
     validated = ActionList.model_validate(action.model_dump())
     logger.info(
@@ -55,6 +75,15 @@ def analyze(source: str | Path, settings: Settings | None = None) -> ActionList:
         len(validated.commitments),
     )
     return validated
+
+
+def _parse_received_at(value: str) -> datetime:
+    try:
+        return datetime.fromisoformat(value.strip())
+    except ValueError as exc:
+        raise EmailActionError(
+            "received-at must be an ISO-8601 timestamp such as 2026-11-01T09:00:00+01:00."
+        ) from exc
 
 
 def _load(source: str | Path, settings: Settings) -> str | bytes:

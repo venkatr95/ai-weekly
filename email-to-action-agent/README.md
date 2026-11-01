@@ -39,12 +39,18 @@ macOS and Linux use `source .venv/bin/activate`.
 ## Use
 
 ```bash
-python cli.py analyze --input email.txt
-python cli.py analyze --input message.eml --format json
-python cli.py analyze --input email.txt --output actions.md
-type email.txt | python cli.py analyze
+python cli.py analyze --input examples/email.txt
+python cli.py analyze --input examples/email_thread.txt
+python cli.py analyze --input examples/email.txt --received-at "2026-11-01T09:00:00+01:00"
+python cli.py analyze --input examples/email.txt --format json
+python cli.py analyze --input examples/email.txt --tone professional
+python cli.py analyze --input examples/email.txt --no-reply
 pytest -q
 ```
+
+`--tone` is `professional`, `friendly`, `concise`, or `formal`. `--no-reply` extracts actions and skips the draft. `--received-at` fills in a timestamp only for messages that have no `Date` header. A month and day such as November 7 stays un-normalized when that timestamp is absent. The checked-in report is `examples/expected_output.json`.
+
+JSON from `--format json` is a public report: `email_metadata`, `summary`, `actions`, `questions`, `draft_reply`, `uncertainties`, and `source_references`. Unknown owners and dates are null. Task ids in that report are `T001`. An open task is reported as `pending`. The draft is not sent.
 
 From Python:
 
@@ -54,9 +60,12 @@ from email_to_action import analyze
 action = analyze("examples/launch_thread.txt")
 print(action.tasks[0].owner.name)
 print(action.draft_reply.body)
+
+dated = analyze("examples/email.txt", received_at="2026-11-01T09:00:00+01:00", tone="formal")
+print(dated.tasks[1].deadline.normalized_date)
 ```
 
-`analyze()` accepts a file path or the email text. A string that is an existing file path is read as a file.
+`analyze()` accepts a file path or the email text. A string that is an existing file path is read as a file. `include_reply=False` returns `draft_reply=None`.
 
 ## Documentation
 
@@ -66,5 +75,6 @@ print(action.draft_reply.body)
 - [Architecture](ARCHITECTURE.md)
 - [Python API](docs/API.md)
 - [Security](docs/SECURITY.md)
+- [Integrations](docs/INTEGRATIONS.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Product requirements](PRD.md)

@@ -16,6 +16,13 @@ _PROMISE = re.compile(
     r"\b(i'll|i will|we'll|we will|i commit|i promise|count on me to)\b",
     re.IGNORECASE,
 )
+_COMPLETION_CLAIM = re.compile(
+    r"\b(i already|i've already|i have already|we've already|we have already|"
+    r"already (?:sent|completed|finished)|i (?:completed|finished)|"
+    r"(?:the|this) (?:task|work) is (?:done|complete|completed))\b",
+    re.IGNORECASE,
+)
+ToneName = Literal["professional", "friendly", "concise", "formal"]
 
 
 class Confidence(str, Enum):
@@ -152,9 +159,22 @@ class Commitment(BaseModel):
 class DraftReply(BaseModel):
     subject: str | None = None
     body: str = Field(min_length=1)
-    tone: str = "professional"
+    tone: ToneName = "professional"
     accepts_commitments: bool = False
+    requires_approval: bool = True
     notes: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def check_reply(self) -> "DraftReply":
+        if self.accepts_commitments:
+            raise ValueError("Draft reply must not accept commitments.")
+        if not self.requires_approval:
+            raise ValueError("Draft reply requires approval before it can be sent.")
+        if _PROMISE.search(self.body):
+            raise ValueError("Draft reply contains an unapproved commitment.")
+        if _COMPLETION_CLAIM.search(self.body):
+            raise ValueError("Draft reply claims that work is already complete.")
+        return self
 
 
 class ActionList(BaseModel):
@@ -164,15 +184,18 @@ class ActionList(BaseModel):
     tasks: list[Task] = Field(default_factory=list)
     questions: list[Question] = Field(default_factory=list)
     commitments: list[Commitment] = Field(default_factory=list)
-    draft_reply: DraftReply
+    draft_reply: DraftReply | None = None
     warnings: list[str] = Field(default_factory=list)
+    reference_timestamp: str | None = None
 
     @model_validator(mode="after")
     def check_action_list(self) -> "ActionList":
-        if self.draft_reply.accepts_commitments:
+        if self.draft_reply is not None and self.draft_reply.accepts_commitments:
             raise ValueError("Draft reply must not accept commitments.")
-        if _PROMISE.search(self.draft_reply.body):
+        if self.draft_reply is not None and _PROMISE.search(self.draft_reply.body):
             raise ValueError("Draft reply contains an unapproved commitment.")
+        if self.draft_reply is not None and _COMPLETION_CLAIM.search(self.draft_reply.body):
+            raise ValueError("Draft reply claims that work is already complete.")
 
         task_ids = [task.task_id for task in self.tasks]
         if len(task_ids) != len(set(task_ids)):
@@ -230,3 +253,83 @@ def _has_cycle(graph: dict[str, list[str]]) -> bool:
         return False
 
     return any(visit(node) for node in graph)
+
+
+class EmailMetadata(BaseModel):
+    subject: str | None = None
+    sender: str | None = None
+    received_at: str | None = None
+
+
+class PublicDeadline(BaseModel):
+    original_text: str | None = None
+    normalized_date: str | None = None
+    type: str
+    time: str | None = None
+    timezone: str | None = None
+    precision: str | None = None
+    confidence: str | None = None
+
+
+class PublicAction(BaseModel):
+    task_id: str
+    description: str
+    owner: str | None = None
+    deadline: PublicDeadline | None = None
+    priority: str
+    status: str
+    dependencies: list[str] = Field(default_factory=list)
+    evidence: str
+    message_id: str
+    priority_explanation: str | None = None
+    evidence_type: str | None = None
+    confidence: str | None = None
+
+
+class PublicQuestion(BaseModel):
+    question_id: str
+    text: str
+    owner: str | None = None
+    message_id: str | None = None
+    evidence: str | None = None
+
+
+class PublicDraft(BaseModel):
+    subject: str | None = None
+    body: str
+    tone: ToneName = "professional"
+    requires_approval: bool = True
+    accepts_commitments: bool = False
+
+    @model_validator(mode="after")
+    def check_draft(self) -> "PublicDraft":
+        if self.accepts_commitments or not self.requires_approval:
+            raise ValueError("A draft reply requires approval and cannot accept commitments.")
+        if _PROMISE.search(self.body) or _COMPLETION_CLAIM.search(self.body):
+            raise ValueError("Draft reply contains an unapproved commitment or a completion claim.")
+        return self
+
+
+class SourceReference(BaseModel):
+    message_id: str
+    sender: str | None = None
+    subject: str | None = None
+    date: str | None = None
+    evidence: list[str] = Field(default_factory=list)
+
+
+class PublicReport(BaseModel):
+    email_metadata: EmailMetadata
+    summary: str
+    actions: list[PublicAction] = Field(default_factory=list)
+    questions: list[PublicQuestion] = Field(default_factory=list)
+    draft_reply: PublicDraft | None = None
+    uncertainties: list[str] = Field(default_factory=list)
+    source_references: list[SourceReference] = Field(default_factory=list)
+    requires_approval: bool = True
+
+    @model_validator(mode="after")
+    def check_report(self) -> "PublicReport":
+        if not self.requires_approval:
+            raise ValueError("A report cannot waive approval.")
+        return self
