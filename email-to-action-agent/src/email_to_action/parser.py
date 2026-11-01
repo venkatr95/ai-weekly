@@ -383,7 +383,11 @@ def _choose_addressee(recipients: list[Participant], greeting: str | None) -> tu
 def _same_name(left: str | None, right: str | None) -> bool:
     if not left or not right:
         return False
-    return left.strip().lower() == right.strip().lower()
+    left_name = left.strip().lower()
+    right_name = right.strip().lower()
+    if left_name == right_name:
+        return True
+    return left_name == right_name.split()[0] or right_name == left_name.split()[0]
 
 
 def _order_messages(messages: list[EmailMessage]) -> tuple[list[EmailMessage], list[str]]:
