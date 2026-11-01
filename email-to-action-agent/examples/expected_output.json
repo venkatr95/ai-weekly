@@ -1,0 +1,155 @@
+{
+  "email_metadata": {
+    "subject": "Q4 Product Launch",
+    "sender": "Sarah",
+    "received_at": null
+  },
+  "summary": "Extracted 5 actions and 1 question from \"Q4 Product Launch\". Owners and dates are included only when the email states them.",
+  "actions": [
+    {
+      "task_id": "T001",
+      "description": "Complete the landing page.",
+      "owner": "Alex",
+      "deadline": {
+        "original_text": "November 10",
+        "normalized_date": null,
+        "type": "explicit",
+        "time": null,
+        "timezone": null,
+        "precision": "day",
+        "confidence": "medium"
+      },
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "evidence": "- Complete the landing page by November 10.",
+      "message_id": "message-1",
+      "priority_explanation": "The message says \"need to\" ahead of this dated request. The deadline is stored on its own and is not itself the reason for high priority.",
+      "evidence_type": "explicit_request",
+      "confidence": "high"
+    },
+    {
+      "task_id": "T002",
+      "description": "Send the final product screenshots to the marketing team.",
+      "owner": "Alex",
+      "deadline": {
+        "original_text": "November 7",
+        "normalized_date": null,
+        "type": "explicit",
+        "time": null,
+        "timezone": null,
+        "precision": "day",
+        "confidence": "medium"
+      },
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "evidence": "- Send the final product screenshots to the marketing team by November 7.",
+      "message_id": "message-1",
+      "priority_explanation": "The message says \"need to\" ahead of this dated request. The deadline is stored on its own and is not itself the reason for high priority.",
+      "evidence_type": "explicit_request",
+      "confidence": "high"
+    },
+    {
+      "task_id": "T003",
+      "description": "Confirm whether the pricing page is ready.",
+      "owner": "Alex",
+      "deadline": null,
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "evidence": "- Confirm whether the pricing page is ready.",
+      "message_id": "message-1",
+      "priority_explanation": "This is an explicit request without urgency language. A deadline, when one is present, does not by itself raise the priority.",
+      "evidence_type": "explicit_request",
+      "confidence": "high"
+    },
+    {
+      "task_id": "T004",
+      "description": "Review the campaign copy.",
+      "owner": "John",
+      "deadline": {
+        "original_text": "November 8",
+        "normalized_date": null,
+        "type": "explicit",
+        "time": null,
+        "timezone": null,
+        "precision": "day",
+        "confidence": "medium"
+      },
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "evidence": "John, please review the campaign copy by November 8.",
+      "message_id": "message-1",
+      "priority_explanation": "The message says \"need to\" ahead of this dated request. The deadline is stored on its own and is not itself the reason for high priority.",
+      "evidence_type": "explicit_request",
+      "confidence": "high"
+    },
+    {
+      "task_id": "T005",
+      "description": "Schedule a final review meeting.",
+      "owner": null,
+      "deadline": {
+        "original_text": "once these items are complete",
+        "normalized_date": null,
+        "type": "explicit",
+        "time": null,
+        "timezone": null,
+        "precision": "event",
+        "confidence": "high"
+      },
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [
+        "T001",
+        "T002",
+        "T003",
+        "T004"
+      ],
+      "evidence": "Let's schedule a final review meeting once these items are complete.",
+      "message_id": "message-1",
+      "priority_explanation": "This is a suggestion, not a direct request. No urgency wording was applied.",
+      "evidence_type": "suggested_action",
+      "confidence": "medium"
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "Q001",
+      "text": "Is the pricing page ready?",
+      "owner": "Alex",
+      "message_id": "message-1",
+      "evidence": "- Confirm whether the pricing page is ready."
+    }
+  ],
+  "draft_reply": {
+    "subject": "Re: Q4 Product Launch",
+    "body": "Hi Sarah,\n\nThanks for the note. I have listed what I found below, and I have not accepted any of it as a commitment.\n\nRequests mentioned:\n- Complete the landing page. Owner: Alex. Deadline: November 10.\n- Send the final product screenshots to the marketing team. Owner: Alex. Deadline: November 7.\n- Confirm whether the pricing page is ready. Owner: Alex. Deadline: not specified.\n- Review the campaign copy. Owner: John. Deadline: November 8.\n- Schedule a final review meeting. Owner: Unassigned. Deadline: once these items are complete.\n\nThese points are ambiguous, so this draft asks rather than guessing:\n- The deadline \"November 10\" has no year in the email, so no calendar date is assigned. Which year applies?\n- The deadline \"November 7\" has no year in the email, so no calendar date is assigned. Which year applies?\n- The deadline \"November 8\" has no year in the email, so no calendar date is assigned. Which year applies?\n- Who should own \"Schedule a final review meeting.\"?\n\nQuestions that still need a response:\n- Is the pricing page ready?\n\nThis draft can be edited before anything is sent. It does not confirm dates, owners, or next steps on your behalf. It remains a draft until you approve it.\n\nBest,\nAlex",
+    "tone": "professional",
+    "requires_approval": true,
+    "accepts_commitments": false
+  },
+  "uncertainties": [
+    "T001 deadline \"November 10\" is not a calendar date because the email does not include a year or a timestamp.",
+    "T002 deadline \"November 7\" is not a calendar date because the email does not include a year or a timestamp.",
+    "T004 deadline \"November 8\" is not a calendar date because the email does not include a year or a timestamp.",
+    "T005 has no owner."
+  ],
+  "source_references": [
+    {
+      "message_id": "message-1",
+      "sender": "Sarah",
+      "subject": "Q4 Product Launch",
+      "date": null,
+      "evidence": [
+        "- Complete the landing page by November 10.",
+        "- Send the final product screenshots to the marketing team by November 7.",
+        "- Confirm whether the pricing page is ready.",
+        "John, please review the campaign copy by November 8.",
+        "Let's schedule a final review meeting once these items are complete."
+      ]
+    }
+  ],
+  "requires_approval": true
+}

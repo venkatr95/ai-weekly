@@ -1,0 +1,23 @@
+From: Sarah Chen <sarah@example.com>
+To: Alex Rivera <alex@example.com>
+Date: Mon, 02 Nov 2026 09:00:00 -0500
+Subject: Q4 Product Launch
+
+Hi Alex,
+
+Please send the final product screenshots to the marketing team by Friday.
+
+Thanks,
+Sarah
+
+From: Alex Rivera <alex@example.com>
+To: Sarah Chen <sarah@example.com>
+Date: Tue, 03 Nov 2026 11:00:00 -0500
+Subject: Re: Q4 Product Launch
+
+Hi Sarah,
+
+The screenshots went out yesterday.
+
+Thanks,
+Alex

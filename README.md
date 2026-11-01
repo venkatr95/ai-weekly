@@ -12,6 +12,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 | 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question |
 | 5 | [evidence-only-research-agent](./evidence-only-research-agent/) | Answers a question from a local folder of PDF, Markdown, and text files. Every finding quotes a stored passage, or the agent abstains |
 | 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage |
+| 7 | [email-to-action-agent](./email-to-action-agent/) | Turns a pasted email or thread into a validated action list with owners, deadlines, questions, and a draft reply that does not accept commitments |
 
 ## Style
 
@@ -23,7 +24,7 @@ Projects 1–3 follow the flat script style in [`.agents/skills/local-python-pro
 - `python extract.py` / `python rag.py` — no servers
 - Multi-provider LLM support via `LLM_PROVIDER` env var (Gemini, Anthropic, OpenAI, Grok)
 
-[rag-agent](./rag-agent/) is a FastAPI service. [evidence-only-research-agent](./evidence-only-research-agent/) and [ai-answer-auditor](./ai-answer-auditor/) are `src/` packages with a `cli.py`. Each of those three documents its own layout in its README.
+[rag-agent](./rag-agent/) is a FastAPI service. [evidence-only-research-agent](./evidence-only-research-agent/), [ai-answer-auditor](./ai-answer-auditor/), and [email-to-action-agent](./email-to-action-agent/) are `src/` packages with a `cli.py`. Each of those documents its own layout in its README.
 
 ## Quick start (projects 1–3)
 
@@ -56,4 +57,14 @@ py -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 python cli.py audit --answer examples/answer.txt --sources examples/sources
+```
+
+[email-to-action-agent](./email-to-action-agent/) turns a pasted email or `.eml` file into tasks, owners, deadlines, and a draft reply. It runs offline:
+
+```bash
+cd email-to-action-agent
+py -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+python cli.py analyze --input examples/launch_thread.txt
 ```
