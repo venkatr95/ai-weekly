@@ -15,5 +15,6 @@ The recommended layout in the PRD uses the package name `email_agent` and one fi
 | Validation | `schemas.py` |
 | Orchestration | `pipeline.py` |
 | Markdown and public JSON | `report.py` |
+| Browser page | `streamlit_app.py` calls `analyze()` |
 
 `integrations/gmail.py` and `integrations/outlook.py` are not imported by the pipeline. They only fetch message text.

@@ -39,3 +39,12 @@ A later message can mark an earlier request completed or blocked. The checklist 
 ## `python` is not recognized
 
 Use `py -3 cli.py analyze --input examples/launch_thread.txt`.
+
+## `streamlit` is not recognized
+
+Install the project requirements, then start the page from `email-to-action-agent`:
+
+```bash
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```

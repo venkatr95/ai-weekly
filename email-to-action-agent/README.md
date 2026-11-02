@@ -45,6 +45,7 @@ python cli.py analyze --input examples/email.txt --received-at "2026-11-01T09:00
 python cli.py analyze --input examples/email.txt --format json
 python cli.py analyze --input examples/email.txt --tone professional
 python cli.py analyze --input examples/email.txt --no-reply
+streamlit run streamlit_app.py
 pytest -q
 ```
 
@@ -66,6 +67,16 @@ print(dated.tasks[1].deadline.normalized_date)
 ```
 
 `analyze()` accepts a file path or the email text. A string that is an existing file path is read as a file. `include_reply=False` returns `draft_reply=None`.
+
+## Web UI
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The page starts with the launch thread in the text box. Paste another email, or upload a `.txt` or `.eml` file. The sidebar sets the tone, an optional received-at timestamp, and whether to include a draft. An uploaded file is analyzed instead of the text box. Load example replaces the text and clears the upload.
+
+The Actions tab lists the same checklist as the Markdown report. The draft tab is editable. The page does not send it. The report tab downloads the validated Markdown and JSON. An edit in the draft tab stays out of those downloads.
 
 ## Documentation
 

@@ -11,6 +11,8 @@ text or .eml
     -> Markdown or JSON
 ```
 
+`cli.py` and `streamlit_app.py` both call `analyze()`. The page does not import the mailbox clients.
+
 ## Parser
 
 `parser.py` accepts plain text and `.eml` files. `.eml` bodies use the standard-library email parser. HTML-only bodies are converted to text and a warning is recorded.

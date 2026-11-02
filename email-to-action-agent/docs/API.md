@@ -80,3 +80,5 @@ render_markdown(action)
 render_json(action)
 to_public(action)  # PublicReport
 ```
+
+`streamlit_app.py` is the browser caller. It passes `received_at`, `tone`, and `include_reply` through to `analyze()` and renders with `to_public`, `render_markdown`, and `render_json`.
