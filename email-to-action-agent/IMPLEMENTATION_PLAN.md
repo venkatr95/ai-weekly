@@ -19,6 +19,7 @@ The milestones in the PRD are implemented in this repository.
 | CLI flags `--received-at`, `--tone`, `--format`, and `--no-reply` | Done in `cli.py` |
 | Hand-labeled precision and recall | Done in `tests/test_evaluation.py` |
 | Read-only Gmail and Outlook adapters, separate from the pipeline | Done in `integrations/` |
+| Streamlit page with paste, upload, tone, received-at, and a draft that is not sent | Done in `streamlit_app.py` |
 | Sending mail, calendar events, or external task assignment | Not built |
 
 The acceptance thread is `examples/launch_thread.txt`. The public sample is `examples/email.txt` with `examples/expected_output.json`. `pytest -q` covers that thread, date resolution, quoted history, the draft-reply rule, and the mailbox adapters with a fake opener.

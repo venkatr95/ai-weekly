@@ -18,6 +18,16 @@ python cli.py analyze --output actions.md < examples/email.txt
 
 `--tone` is `professional` (the default), `friendly`, `concise`, or `formal`. `--no-reply` extracts actions and omits the draft. Exit code `0` means a report was written. Exit code `2` means the input or the timestamp could not be read.
 
+## Web UI
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The page calls `analyze()` with the same tone, received-at timestamp, and reply switch as the CLI. Paste text, or upload a `.txt` or `.eml` file. When a file is uploaded, that file is the input. Load example fills the text box from `examples/` and clears the upload.
+
+The draft can be edited in the browser and downloaded as text. The Markdown and JSON downloads are the validated report from `render_markdown` and `render_json`. The page does not send email and does not call the Gmail or Outlook clients.
+
 ## What the summary contains
 
 - An email summary with the subject and the count of actions and questions.

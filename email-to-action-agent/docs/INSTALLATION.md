@@ -1,6 +1,6 @@
 # Installation
 
-Python 3.11 or newer is required. The package dependencies are Pydantic and pytest.
+Python 3.11 or newer is required. The package dependencies are Pydantic, pytest, and Streamlit.
 
 ```bash
 cd email-to-action-agent
@@ -8,6 +8,7 @@ py -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 pytest -q
+streamlit run streamlit_app.py
 ```
 
 On macOS and Linux, activate the virtualenv with `source .venv/bin/activate`.

@@ -13,3 +13,5 @@ Supporting text is copied from the email because the product requires the exact 
 Input larger than `max_chars` is rejected. Parse failures raise `EmailActionError` and the CLI prints them to stderr.
 
 Mailbox adapters are separate from the pipeline. They require an access token in the environment or in the constructor, and they issue GET requests only. They have no send, delete, or modify method. See [Integrations](INTEGRATIONS.md).
+
+`streamlit_app.py` calls `analyze()` only. It does not import the mailbox clients, and it does not send the draft. An uploaded file is written to a temporary `.eml` only long enough to parse it, then deleted. Paste and upload text stay in the Streamlit session on this machine.

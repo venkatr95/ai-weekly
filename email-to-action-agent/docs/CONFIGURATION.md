@@ -9,7 +9,7 @@ The analyzer does not need an API key. Email text stays on this machine.
 | `max_chars` | `1000000` | Maximum email size, in characters |
 | `provider` | `heuristic` | The only extractor. It does not call a model |
 
-Pass a `Settings` object to `analyze()` when a test or a caller needs a smaller limit. The CLI uses the defaults.
+Pass a `Settings` object to `analyze()` when a test or a caller needs a smaller limit. The CLI and the Streamlit page use the defaults. The page reads the tone, received-at timestamp, and reply switch from the sidebar. It does not read mailbox tokens.
 
 These arguments are per call, not environment variables:
 
