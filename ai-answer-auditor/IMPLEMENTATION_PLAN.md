@@ -37,6 +37,7 @@ Version 1 is implemented in this repository. The milestones below are the build 
 - `examples/benchmark.json` and `evaluation.py` score manually labeled cases. The labels are the judge.
 - `examples/answer.txt` and `examples/sources/` are the three-source demonstration. `examples/expected_report.json` is the report that command produces.
 - Documentation is in `README.md`, `ARCHITECTURE.md`, and `docs/`.
+- `streamlit_app.py` is a browser page over `audit()`. Tests: `test_webui.py`.
 - Tests: `test_end_to_end.py`, plus `pytest -q` and `python cli.py evaluate`.
 
 ## Done when

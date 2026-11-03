@@ -60,6 +60,16 @@ python cli.py evaluate
 
 This runs `examples/benchmark.json` through the heuristic provider and prints accuracy. The labeled statuses are the judge. See [EVALUATION.md](EVALUATION.md).
 
+## Web UI
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The page calls `audit()` with the pasted answer, the optional question, and either the pasted sources or the uploaded files. When a file is uploaded, that file is the source and the text boxes are not. Load example fills the boxes from `examples/` and clears the upload.
+
+The provider menu starts on `heuristic`. `xai` uses `XAI_API_KEY` from the environment or `.env` and sends the answer, the question, and the retrieved passages to xAI. The Markdown and JSON downloads are `render_markdown` and `render_json`. Coverage on the page is the same figure as the CLI report.
+
 ## Python
 
 ```python

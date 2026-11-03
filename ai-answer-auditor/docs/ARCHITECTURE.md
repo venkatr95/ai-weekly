@@ -18,6 +18,8 @@ answer + sources
 
 Retrieval only chooses passages. The verifier assigns the status. The validator then checks that every quote is a real span of the extracted text.
 
+`streamlit_app.py` is another entry point. It calls `audit()` and does not assign statuses itself.
+
 ## Status rules that the report enforces
 
 - Supported means a passage states the claim.

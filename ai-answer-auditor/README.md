@@ -43,6 +43,7 @@ python cli.py audit --answer answer.txt --sources ./sources/ --question "What ha
 python cli.py audit --answer answer.txt --sources ./sources/ --format json
 python cli.py extract-claims --answer answer.txt
 python cli.py evaluate
+streamlit run streamlit_app.py
 pytest -q
 ```
 
@@ -60,6 +61,18 @@ report = audit(
 )
 print(report.summary.evidence_coverage)
 ```
+
+## Web UI
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The page starts with the bundled answer and the three sources. Paste another answer, edit the source boxes, or upload `.txt`, `.md`, `.pdf`, or `.json` files. An uploaded file is audited instead of the text boxes. Load example restores the demo and clears the upload.
+
+The provider starts on `heuristic`, including when `AUDITOR_PROVIDER` is `xai`. Choose `xai` only when the answer and the passages can be sent to xAI. The page does not show the API key.
+
+The Claims tab is the checklist. The Report tab downloads the validated Markdown and JSON from the same renderer as the CLI.
 
 ## Documentation
 

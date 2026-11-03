@@ -44,6 +44,17 @@ The note says the quotation does not appear in the source. That happens when a m
 
 Coverage is supported claims divided by factual claims. Partially supported and contradicted claims do not count as supported. In the bundled demo the 25% claim is contradicted because the figures show 20%, so coverage is 25.0, not 50.
 
+## `streamlit` is not recognized
+
+Install the project requirements, then start the page from `ai-answer-auditor`:
+
+```bash
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
+The page uses the same virtualenv as `cli.py`. An empty answer, a missing source, a bad PDF, or a missing `XAI_API_KEY` is shown on the page. Those are the same errors the CLI prints.
+
 ## pytest cannot import the package
 
 Run pytest from the project directory. `pytest.ini` puts `src` on the Python path. Use the project virtualenv so Pydantic and PyMuPDF are installed.

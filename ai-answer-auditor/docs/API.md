@@ -90,6 +90,10 @@ settings = Settings(provider="heuristic")
 
 `load_settings("xai")` raises `ConfigurationError` when `XAI_API_KEY` is missing.
 
+## Browser page
+
+`streamlit_app.py` calls `audit()` with the pasted answer, the optional question, pasted sources or uploaded files, and the provider selected on the page. Uploads go through `load_sources` and then `audit_documents`. The page renders with `render_markdown`, `render_json`, and `review_actions`. It starts on the heuristic provider.
+
 ## Errors
 
 | Exception | When |

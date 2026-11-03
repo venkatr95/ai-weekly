@@ -120,10 +120,14 @@ Markdown includes the executive summary, statistics, claim-by-claim results, quo
 
 Documents are untrusted. Embedded instructions are ignored. File contents are not executed. Credentials stay in the environment. Source text is not logged by default. Parse failures are reported. Secrets are redacted in reports. Provider data handling is documented in [docs/SECURITY.md](docs/SECURITY.md).
 
+### FR-11 Browser page
+
+`streamlit run streamlit_app.py` opens the same audit as the CLI. The page accepts a pasted answer, an optional question, pasted sources, or uploaded source files. It defaults to the heuristic provider. Downloads are the validated Markdown and JSON reports.
+
 ## 7. Stack
 
-Python 3.11+, Pydantic, PyMuPDF, a small sentence segmenter, an optional xAI provider behind the same interface, and pytest. The heuristic checker is the default so the core path does not depend on a particular model.
+Python 3.11+, Pydantic, PyMuPDF, Streamlit, a small sentence segmenter, an optional xAI provider behind the same interface, and pytest. The heuristic checker is the default so the core path does not depend on a particular model.
 
 ## 8. Acceptance
 
-The implementation accepts an answer and three sources, reads PDF, text, and Markdown, extracts and splits claims, assigns all five statuses, quotes sources for support and contradiction, checks those quotes, detects conflicts, writes Markdown and JSON, exposes a CLI and a Python API, and passes the unit and integration tests. The reproducible demo is `examples/answer.txt` with `examples/sources/`.
+The implementation accepts an answer and three sources, reads PDF, text, and Markdown, extracts and splits claims, assigns all five statuses, quotes sources for support and contradiction, checks those quotes, detects conflicts, writes Markdown and JSON, exposes a CLI, a browser page, and a Python API, and passes the unit and integration tests. The reproducible demo is `examples/answer.txt` with `examples/sources/`.

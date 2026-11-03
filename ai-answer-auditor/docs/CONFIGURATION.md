@@ -10,7 +10,7 @@ The default configuration runs entirely on the machine. Copy `.env.example` to `
 | `XAI_BASE_URL` | `https://api.x.ai/v1` | API origin. The client calls `/responses`. |
 | `AUDITOR_LOG_SOURCES` | `0` | Source text is not logged at info level. Leave this off for confidential documents. |
 
-The CLI flag `--provider heuristic` or `--provider xai` overrides `AUDITOR_PROVIDER` for that command.
+The CLI flag `--provider heuristic` or `--provider xai` overrides `AUDITOR_PROVIDER` for that command. The browser page has the same control. It starts on `heuristic` even when `AUDITOR_PROVIDER` is `xai`, and it sends data to xAI only after that provider is selected and an audit is run.
 
 ## Heuristic provider
 
