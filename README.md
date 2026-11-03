@@ -11,7 +11,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 | 3 | [sanskrit-tts](./sanskrit-tts/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script |
 | 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question |
 | 5 | [evidence-only-research-agent](./evidence-only-research-agent/) | Answers a question from a local folder of PDF, Markdown, and text files. Every finding quotes a stored passage, or the agent abstains |
-| 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage |
+| 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage. `streamlit run streamlit_app.py` opens the same auditor in the browser |
 | 7 | [email-to-action-agent](./email-to-action-agent/) | Turns a pasted email or thread into a validated action list with owners, deadlines, questions, and a draft reply that does not accept commitments. `streamlit run streamlit_app.py` opens the same analyzer in the browser |
 
 ## Style
@@ -57,6 +57,7 @@ py -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 python cli.py audit --answer examples/answer.txt --sources examples/sources
+streamlit run streamlit_app.py
 ```
 
 [email-to-action-agent](./email-to-action-agent/) turns a pasted email or `.eml` file into tasks, owners, deadlines, and a draft reply. It runs offline:

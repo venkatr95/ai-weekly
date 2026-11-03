@@ -22,6 +22,7 @@ Dependencies are pinned in `requirements.txt`:
 
 - Pydantic, for the report schema
 - PyMuPDF, for PDF text extraction
+- Streamlit, for the browser page
 - pytest, for the tests
 
 Check the install:
@@ -29,6 +30,7 @@ Check the install:
 ```bash
 pytest -q
 python cli.py audit --answer examples/answer.txt --sources examples/sources
+streamlit run streamlit_app.py
 ```
 
 No API key is required for the default heuristic provider. See [CONFIGURATION.md](CONFIGURATION.md) if you want the optional xAI provider.

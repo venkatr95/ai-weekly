@@ -47,6 +47,10 @@ When two sources disagree, the report keeps both passages. The status is partial
 | `security.py` | Prompts that treat documents as untrusted data, and secret redaction. |
 | `schemas.py` | Pydantic models. Invalid counts and coverage cannot be returned. |
 
+## Entry points
+
+`cli.py` and `streamlit_app.py` both call `audit()`. Uploaded files are parsed with `load_sources` and then passed to `audit_documents`, which is the same path `audit()` uses after it loads files. The page does not score claims on its own.
+
 ## Providers
 
 `heuristic` is the default. It runs offline. The same rules produce the same report.

@@ -109,7 +109,7 @@ def render_markdown(report: AuditReport) -> str:
     for claim in report.claims:
         lines.extend(_render_claim(claim))
     lines.extend(["## Recommended review actions", ""])
-    actions = _actions(report.claims)
+    actions = review_actions(report.claims)
     if actions:
         lines.extend(f"- {action}" for action in actions)
     else:
@@ -169,7 +169,7 @@ def _render_evidence(excerpts: list[EvidenceExcerpt]) -> list[str]:
     return lines
 
 
-def _actions(claims: list[ClaimResult]) -> list[str]:
+def review_actions(claims: list[ClaimResult]) -> list[str]:
     actions: list[str] = []
     for status, template in _REVIEW.items():
         ids = [claim.claim_id for claim in claims if claim.status == status]

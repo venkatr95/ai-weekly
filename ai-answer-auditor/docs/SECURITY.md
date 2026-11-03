@@ -37,3 +37,9 @@ A model error is returned as `ProviderError`. The heuristic result is not substi
 ## Reports
 
 A report can quote the sources. If a source contains a secret, that secret may be inside a quotation until the redactor runs. Review reports before you share them. The tool does not claim the answer is true beyond the supplied sources, and it is not a substitute for legal, scientific, or editorial review.
+
+## Browser page
+
+`streamlit_app.py` calls `audit()`. It does not contain a second checker. The page opens on the heuristic provider, so the first run does not leave the machine. Choosing `xai` and running an audit sends the answer, the question, and the retrieved passages to xAI, as the model provider section describes. The page does not display `XAI_API_KEY`.
+
+Pasted text stays in the Streamlit session. An uploaded file is written to a temporary directory only long enough to parse it, then the directory is deleted. The report stores the file name, not that directory. A path pasted into a source box is text. It is not opened.
