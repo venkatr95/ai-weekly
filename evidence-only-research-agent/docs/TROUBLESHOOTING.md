@@ -69,3 +69,16 @@ A paraphrase can abstain under the extractive provider even when the idea is pre
 ## pytest collected the wrong project
 
 Run `py -3 -m pytest` inside `evidence-only-research-agent`, not in a parent directory.
+
+## `streamlit` is not recognized
+
+Install the project requirements, then start the page from this directory:
+
+```bash
+py -3 -m pip install -r requirements.txt
+py -3 -m streamlit run streamlit_app.py
+```
+
+The page uses the same environment as `cli.py`. It listens on `127.0.0.1`. An empty question, a missing index, a folder with no supported files, or a missing `XAI_API_KEY` is shown on the page. Those are the same errors the CLI prints.
+
+The page index is temporary and starts empty in each new session. Index the example corpus or your folder again after you restart Streamlit. That restart does not delete `data/index`.

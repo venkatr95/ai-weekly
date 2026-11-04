@@ -61,3 +61,13 @@ xAI documents `grok-embedding-small` for its collections API. This project does 
 CLI flags override the index directory, chunk size, chunk overlap, retrieval count, and similarity threshold for that command.
 
 Changing chunk size or overlap causes the next index to re-extract, because the stored chunks would no longer match.
+
+## Web UI
+
+The page reads the same environment and `.env` as the CLI, with three differences:
+
+- The provider menu overrides `GENERATION_PROVIDER` for that action. It starts on `extractive`.
+- Embeddings are forced to `local`, including when the menu is set to `xai` or `openai_compatible`.
+- The page does not use `INDEX_DIR`. Its index is a temporary session folder, so it does not replace `data/index`.
+
+`CHUNK_SIZE`, `CHUNK_OVERLAP`, `XAI_API_KEY`, `XAI_MODEL`, `XAI_BASE_URL`, and the OpenAI-compatible variables still apply. Passage count and the minimum score on the page override `RETRIEVAL_K` and `SIMILARITY_THRESHOLD` for that question.

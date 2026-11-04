@@ -50,3 +50,17 @@ py -3 cli.py evaluate --output examples/evaluation_results.json
 Evaluation always rebuilds an index of `--documents` (default `examples/documents`) using the offline providers, then scores `--questions` (default `examples/questions.json`). Without `--index-dir`, that index is temporary and is deleted afterward. With `--index-dir`, that directory is rebuilt and replaced.
 
 `--provider configured` uses `GENERATION_PROVIDER` from the environment. That can call the network and spend API credit. The default `extractive` provider does not.
+
+## Web UI
+
+```bash
+py -3 -m streamlit run streamlit_app.py
+```
+
+The page calls `ResearchPipeline` for indexing and asking. It does not score answers on its own.
+
+Index one of three inputs: the bundled `examples/documents` corpus, files you upload, or a folder or file path on this machine. Uploaded names are basenames. A path typed into the question box is not opened. The page keeps its index in a temporary session folder and does not write `data/index`.
+
+The provider menu starts on `extractive`. Embeddings on the page are always `local`. `xai` uses `XAI_API_KEY` from the environment or `.env` and sends the question and the retrieved passages to xAI. `openai_compatible` sends the same payload to `OPENAI_COMPATIBLE_BASE_URL`. The server listens on `127.0.0.1`.
+
+Markdown and JSON downloads are `render_markdown` and the verified response object. Passage scores stay on the Passages tab. A score is not evidence.

@@ -22,6 +22,8 @@ Done. Polarity heuristics surface direct disagreements and leave them unresolved
 
 Done. Setup, configuration, usage, API, evaluation, security, and troubleshooting docs are in `docs/`. `examples/documents` is a fictional corpus. `examples/questions.json` is the gold set. `examples/evaluation_results.json` is the measured run documented in `docs/EVALUATION.md`. A clean virtual environment installed `requirements.txt` and passed `pytest` on Python 3.12.10.
 
+`streamlit_app.py` is a local single-user page over the same pipeline. It is not a multi-user server. Tests: `tests/test_webui.py`.
+
 ## Acceptance mapping
 
 | Criterion | Where it is demonstrated |

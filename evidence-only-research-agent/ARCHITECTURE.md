@@ -20,6 +20,7 @@ question -> retrieve -> draft claims -> verify citations -> markdown or JSON
 | `citation_verification.py` | Rebuilds the user-facing answer. An excerpt must occur in the indexed chunk, the page must match, numbers in the claim must occur in the excerpt, and enough claim terms must occur in the excerpt. Free-form model prose is discarded. |
 | `security.py` | System prompt and the untrusted-passage wrapper used for remote models. Secret redaction for provider errors. |
 | `evaluation.py` | Scores the gold file in `examples/questions.json`. |
+| `streamlit_app.py` | Local page. Calls `ResearchPipeline` for index and ask. Does not answer on its own. |
 
 ## Index lifecycle
 
@@ -49,4 +50,4 @@ xAI's collections API documents an embedding model named `grok-embedding-small`.
 
 ## What is intentionally out of scope
 
-Web browsing, fine-tuning, OCR, multi-user serving, and editing source files are not implemented. Conflict resolution is not implemented: the agent reports both sides.
+Web browsing, fine-tuning, OCR, multi-user serving, and editing source files are not implemented. `streamlit_app.py` is a local single-user page over `ResearchPipeline`, bound to `127.0.0.1`. Conflict resolution is not implemented: the agent reports both sides.
