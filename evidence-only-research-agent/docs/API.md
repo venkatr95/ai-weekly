@@ -105,3 +105,7 @@ py -3 cli.py ask "Did Intervention X produce a statistically significant improve
 ## Errors
 
 Library calls raise `evidence_agent.errors.EvidenceAgentError` subclasses: `ConfigurationError`, `IndexNotFoundError`, `CorruptIndexError`, `EmptyCorpusError`, `ProviderError`, and `GenerationError`. The CLI prints the message and exits 2. Error text is scrubbed so it does not include API keys.
+
+## Web UI
+
+`streamlit_app.py` calls `ResearchPipeline.index_path` and `ResearchPipeline.ask`. It renders with `render_markdown` and `AnswerResponse.model_dump()`. The page starts on `extractive` and forces `embedding_provider` to `local` for its own index. `xai` and `openai_compatible` are optional and send only the question and the retrieved passages. The page index is a temporary directory, not `INDEX_DIR` and not `data/index`.

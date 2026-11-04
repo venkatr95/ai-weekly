@@ -14,6 +14,7 @@ py -3 -m venv .venv
 py -3 examples/build_sample_pdfs.py
 py -3 cli.py index ./examples/documents
 py -3 cli.py ask "What evidence supports the effectiveness of Intervention X, and what long-term benefits are reported?"
+py -3 -m streamlit run streamlit_app.py
 py -3 -m pytest
 ```
 
@@ -68,9 +69,16 @@ py -3 cli.py sources
 py -3 cli.py show-source <chunk-id>
 py -3 cli.py stats
 py -3 cli.py evaluate
+py -3 -m streamlit run streamlit_app.py
 ```
 
 `--show-passages` prints retrieved text and scores. A score only ranks passages. It is not proof.
+
+## Web UI
+
+`streamlit run streamlit_app.py` opens a local page on `127.0.0.1`. Index the example corpus, upload files, or type a folder on this machine, then ask. The page calls `ResearchPipeline`. It starts on the extractive provider and keeps embeddings local, so the first run does not leave the machine.
+
+The page index is a temporary session folder. It does not replace `data/index`. Choosing `xai` or `openai_compatible` sends the question and the retrieved passages to that provider. Citations are still checked locally. The page does not show API keys. Downloads are the verified Markdown and JSON answers.
 
 ## Providers
 
@@ -86,7 +94,7 @@ Set `XAI_API_KEY` only in the environment or a gitignored `.env`. See [docs/CONF
 
 ## Tests and evaluation
 
-`py -3 -m pytest` runs 33 tests without network access. The suite includes a generated folder of 50 PDFs, page-number checks, abstention, conflicting sources, citation rejection, and a prompt-injection sentence that must not be obeyed.
+`py -3 -m pytest` runs 40 tests without network access. The suite includes a generated folder of 50 PDFs, page-number checks, abstention, conflicting sources, citation rejection, a prompt-injection sentence that must not be obeyed, and the local web page.
 
 `py -3 cli.py evaluate` rebuilds a temporary index of `examples/documents` and scores `examples/questions.json`. The latest local run is in [examples/evaluation_results.json](examples/evaluation_results.json) and [docs/EVALUATION.md](docs/EVALUATION.md). Those perfect scores are for this small synthetic set. They do not mean the system is hallucination-free.
 

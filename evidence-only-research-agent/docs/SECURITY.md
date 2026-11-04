@@ -37,3 +37,11 @@ The local index stores extracted text in `manifest.json` so later citation check
 Prompt instructions in a document can still influence a remote model before verification. Verification removes claims that are not grounded in a retrieved excerpt. It cannot stop the provider from logging the passages on the provider's side. Do not index material you cannot send to that provider.
 
 The agent does not encrypt the index. File permissions on `data/index` are the operating system's defaults.
+
+## Browser page
+
+`streamlit_app.py` calls `ResearchPipeline`. It does not contain a second answerer. The page opens on `extractive` with local embeddings, so the first run does not leave the machine. Choosing `xai` sends the question and the retrieved passages to xAI. Choosing `openai_compatible` sends them to `OPENAI_COMPATIBLE_BASE_URL`. The page does not display API keys. Error text is passed through `scrub_text`.
+
+The server binds to `127.0.0.1` (`.streamlit/config.toml`). The session index and uploaded copies live in temporary directories, not in `data/index`. Uploaded file names are reduced to a basename before they are written. A question is not opened as a path. The page is a local single-user UI. It is not a multi-user service.
+
+Treat the session index like `data/index`: it stores extracted text. Remove the temporary folder when you are done with those documents. The Session index expander shows the path.

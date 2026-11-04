@@ -47,6 +47,7 @@ py -3 -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
 py -3 cli.py index ./examples/documents
 py -3 cli.py ask "What evidence supports the effectiveness of Intervention X?"
+py -3 -m streamlit run streamlit_app.py
 ```
 
 [ai-answer-auditor](./ai-answer-auditor/) checks a generated answer against source files. The default checker runs offline:

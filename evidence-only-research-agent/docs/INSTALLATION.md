@@ -9,6 +9,7 @@ py -3 -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
 py -3 examples/build_sample_pdfs.py
 py -3 cli.py index ./examples/documents
+py -3 -m streamlit run streamlit_app.py
 py -3 -m pytest
 ```
 
@@ -20,6 +21,9 @@ On Unix-like shells the virtual environment interpreter is `.venv/bin/python`.
 - `pymupdf==1.26.5`
 - `numpy==2.3.0`
 - `pytest==8.4.0`
+- `streamlit==1.66.1`
+
+`streamlit` is only needed for the local page. The CLI and the offline tests import the page helpers without starting a server. The page test skips itself when Streamlit is not installed.
 
 No API key is required for indexing, asking, or tests. The default generation provider is `extractive` and the default embedding provider is `local`.
 
