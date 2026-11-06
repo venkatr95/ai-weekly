@@ -92,7 +92,7 @@ Shipped, beyond original v1 scope — the low-effort future-work items were pull
 | Item | Status | Where |
 |---|---|---|
 | Source citations | ✅ Done | `rag_core.format_sources()`; surfaced in CLI (`Sources:` line) and web UI (expander) |
-| Streamlit web UI | ✅ Done | `streamlit_app.py` — chat UI, sidebar reindex button, per-answer citations |
+| Streamlit web UI | ✅ Done | `streamlit_app.py` — chat, citations, uploads into `docs/`, sample note, reindex, clear conversation. Indexes once per browser session, then again on upload, sample, or Reindex |
 | Auto-ingest (incremental, not filesystem-watching) | ✅ Done | `rag_core.sync_vectorstore()` — hash-based, runs at the start of every entry point |
 | Daily digest | ✅ Done | `daily_digest.py` — summarizes files changed since last run, standalone/cron-able |
 | Multi-provider LLM support (OpenAI, Gemini, Grok, in addition to Anthropic) | ✅ Done | `rag_core.get_llm()`, selected via `LLM_PROVIDER`/`LLM_MODEL` env vars; used by both chat (`build_chain`) and the digest |

@@ -8,5 +8,6 @@ langchain-chroma
 chromadb
 sentence-transformers
 pypdf
-streamlit
+streamlit==1.66.1
+pytest==8.4.0
 python-dotenv
