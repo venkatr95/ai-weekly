@@ -7,7 +7,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 | # | Project | What it does |
 |---|---|---|
 | 1 | [structured-output-agent](./structured-output-agent/) | Converts natural-language support messages into validated `SupportTicket` objects using Pydantic schema enforcement and LLM retry logic |
-| 2 | [personal-rag-assistant](./personal-rag-assistant/) | Local RAG chatbot over personal documents (PDF, TXT, MD) with conversational memory and incremental indexing |
+| 2 | [personal-rag-assistant](./personal-rag-assistant/) | Local RAG chatbot over personal documents (PDF, TXT, MD) with conversational memory and incremental indexing. `streamlit run streamlit_app.py` opens the same assistant in the browser |
 | 3 | [sanskrit-tts](./sanskrit-tts/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script |
 | 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question |
 | 5 | [evidence-only-research-agent](./evidence-only-research-agent/) | Answers a question from a local folder of PDF, Markdown, and text files. Every finding quotes a stored passage, or the agent abstains |

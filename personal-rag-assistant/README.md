@@ -56,11 +56,17 @@ First run downloads the `all-MiniLM-L6-v2` embedding model (~90MB) and builds `c
 
 ### Web UI
 
+From this directory:
+
 ```bash
-streamlit run streamlit_app.py
+py -3 -m streamlit run streamlit_app.py
 ```
 
-Chat in the browser, see per-answer source citations in an expandable panel, and reindex or clear the conversation from the sidebar.
+The page uses the same indexing and chat chain as `rag.py`. On open it indexes `docs/`. The sidebar lists those files, saves PDF, TXT, and MD uploads into `docs/`, copies `examples/sample_note.md` when you want a file to try, and reindexes. Unchanged files are skipped. Each answer has a source list. With documents indexed and the conversation empty, two starter questions are on the page. Clear conversation starts a new memory; the index stays. Embeddings stay on this machine. The configured chat model receives the question and the retrieved passages.
+
+```bash
+py -3 -m pytest
+```
 
 ### Daily digest
 
@@ -72,7 +78,7 @@ Summarizes what's new or changed across your documents since the last time it ra
 
 ## How indexing works
 
-Every run computes a SHA-256 hash of each file in `docs/` and compares it against `index_manifest.json`. Only new or changed files are re-embedded and written to the vector store; unchanged files are skipped, and files removed from `docs/` have their chunks dropped automatically. This means you can drop new files into `docs/` and re-run any of the three entry points — no full rebuild needed.
+`sync_vectorstore()` computes a SHA-256 hash of each file in `docs/` and compares it against `index_manifest.json`. Only new or changed files are re-embedded and written to the vector store; unchanged files are skipped, and files removed from `docs/` have their chunks dropped automatically. The CLI and the daily digest do this every run. The web UI does it when the browser session starts, and again when you upload, add the sample note, or click Reindex.
 
 ## Project files
 
@@ -82,6 +88,8 @@ Every run computes a SHA-256 hash of each file in `docs/` and compares it agains
 | `rag.py` | CLI chat loop |
 | `streamlit_app.py` | Web chat UI |
 | `daily_digest.py` | Standalone "what's new" summary script |
+| `examples/sample_note.md` | Short note the web UI can copy into `docs/` |
+| `tests/test_webui.py` | Web UI tests (no embedding download) |
 | `docs/` | Drop your source documents here (gitignored in practice — see below) |
 | `chroma_db/` | Local persisted vector store (auto-created) |
 | `index_manifest.json` | Tracks per-file content hashes for incremental indexing (auto-created) |
