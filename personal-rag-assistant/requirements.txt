@@ -1,4 +1,6 @@
 langchain
+langchain-classic
+langchain-text-splitters
 langchain-anthropic
 langchain-openai
 langchain-google-genai
