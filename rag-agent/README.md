@@ -1,6 +1,6 @@
 # RAG Agent
 
-Answers questions from your own PDF, TXT, and Markdown files. Every factual sentence cites a chunk that was actually retrieved. If the files do not support the question, the API says so and returns no citations.
+Answers questions from your own PDF, TXT, and Markdown files. Every factual sentence cites a chunk that was actually retrieved. If the files do not support the question, the response says so and returns no citations. The same pipeline is available as an HTTP API and as a local page.
 
 ```
 Question → embedding → vector search → top chunks → grounded answer → citations
@@ -52,6 +52,56 @@ py -m app.demo --llm auto "What is the refund period?"
 ```
 
 The demo still embeds with the local hasher, so retrieval does not depend on the embeddings endpoint. The API process is different: with a key and `EMBEDDING_PROVIDER=auto`, it uses `embed-latest`.
+
+## Web UI
+
+The page calls `RAGPipeline` directly. It does not start the API process, and it does not need `.env` or PostgreSQL. Install the `web` extra and run it from `rag-agent`:
+
+```powershell
+pip install -e ".[web]"
+py -m streamlit run streamlit_app.py
+```
+
+`streamlit` is not on `PATH` until that extra is installed in the active virtual environment. `py -m streamlit` uses that environment. Docker Compose runs the API only. The image does not include the page.
+
+Each browser session has its own in-memory index. Embeddings are the local hasher (384 dimensions). `VECTOR_STORE`, `DATABASE_URL`, `EMBEDDING_PROVIDER`, and `LLM_PROVIDER` in the environment do not change that. Closing the browser tab drops the index.
+
+### Documents
+
+Supported uploads are `.pdf`, `.txt`, `.md`, and `.markdown`, up to 20 MB, the same limit as `POST /v1/documents`.
+
+**Index uploaded files** adds those files to the session. The stored name is the file name only. A path in the upload name is not opened. Characters that are unsafe in a file name are replaced, and a second file with the same name in one batch is stored as `name-2`. One file that cannot be parsed is reported, and the other files in the batch stay indexed.
+
+**Load sample corpus** replaces the session index with `evaluation/corpus` plus `sample_docs/refund-policy.pdf`. If that PDF is missing, the page builds it. The 30-day rule is on page 4 of the PDF and also in `refund-policy.md`. Asking "What is the refund period?" cites `refund-policy.pdf`, page 4.
+
+**Clear index** drops the session documents and the earlier answers.
+
+### Asking
+
+Type a question and press **Ask**, or choose a sample question and press **Use sample question**. The sample questions are:
+
+- What is the refund period?
+- What is the difference between the refund policy and the cancellation policy?
+- How many weeks of paid parental leave do employees receive?
+- What is the company's annual revenue?
+
+The revenue question is the refusal with no citations. The text in the question box is not opened as a file. A question can be at most 4000 characters.
+
+**Passages** is `top_k`, from 1 to 20. The default is 5. **Show retrieved chunks** adds the chunks, scores, and text. That is the same payload as `"debug": true` on `POST /v1/query`.
+
+Each question is answered on its own. Earlier turns are not sent to the answerer. The page keeps the last 20 answers in the session. **Download answer** writes the answer and the citation lines. **Download JSON** writes the response object.
+
+Citations use the same check as the API. A PDF citation names the page the chunk was cut from. TXT and Markdown citations have no page. If nothing survives the check, the answer is:
+
+```text
+I couldn't find sufficient information in the provided documents to answer this question.
+```
+
+### Answerer
+
+The sidebar starts on `extractive`. That answerer quotes retrieved sentences on this machine.
+
+`xai` is applied on the next question. It sends the question and the retrieved chunks to `grok-4.7` at `https://api.x.ai/v1`. Set `XAI_API_KEY` in the environment before asking. `LLM_MODEL`, `XAI_BASE_URL`, and `REASONING_EFFORT` are read from the environment for that call. The default model is `grok-4.7` and the default reasoning effort is `low`. The key is not shown. Error text has the key removed, along with strings that look like `xai-` or `sk-` tokens. Switching answerer keeps the index. Citations are still checked on this machine.
 
 ## API
 
@@ -164,6 +214,11 @@ The database password in `docker-compose.yml` is a local default (`rag` / `rag`)
 | `EMBEDDING_DIM` | `384` | Width of the hashing embedder only |
 | `LLM_PROVIDER` | `auto` | `auto`, `xai`, or `extractive` |
 | `EMBEDDING_PROVIDER` | `auto` | `auto`, `xai`, or `hashing` |
+| `LLM_MODEL` | `grok-4.7` | Answer model when the provider is xAI |
+| `XAI_BASE_URL` | `https://api.x.ai/v1` | Answer endpoint when the provider is xAI |
+| `REASONING_EFFORT` | `low` | `low`, `medium`, `high`, or `xhigh`. grok-4.7 cannot turn reasoning off. |
+
+The table applies to the API process and to `py -m app.demo`. The web page pins its own index settings: in-memory store, hashing embedder, extractive answerer. It reads `XAI_API_KEY`, `LLM_MODEL`, `XAI_BASE_URL`, and `REASONING_EFFORT` only after you choose xAI and ask.
 
 ## Tests
 
@@ -172,7 +227,7 @@ pytest
 py evaluation/run_eval.py
 ```
 
-The suite covers chunking, embeddings, PDF parsing, retrieval order, reranking, citation integrity, schema validation, the HTTP API, a fabricated-answer refusal, and the evaluation corpus.
+The suite covers chunking, embeddings, PDF parsing, retrieval order, reranking, citation integrity, schema validation, the HTTP API, a fabricated-answer refusal, the evaluation corpus, and `tests/test_webui.py`. That file checks upload names, the sample corpus, the page-4 citation, the revenue refusal, and that a question string is not opened as a path. The test that clicks through the page runs when the `web` extra is installed and skips otherwise. The other tests in the file run without Streamlit.
 
 `evaluation/questions.jsonl` has 16 questions: direct lookups, questions that need two documents, questions whose evidence sits in different chunks of the handbook, a citation check, and three questions the documents cannot answer (revenue, the CEO, and a Wi-Fi password).
 
@@ -195,6 +250,7 @@ app/generation/     grok structured output, or quoted sentences
 app/citations/      drop any citation the retrieval list does not support
 app/db/             PostgreSQL + pgvector, and the in-memory store
 app/demo.py         print the pipeline on the sample corpus
+streamlit_app.py    browser UI over the in-memory pipeline
 evaluation/         corpus, 16 questions, metric runner
 sample_docs/        refund-policy.pdf, regenerated by py -m app.sample_pdf
 ```
