@@ -9,7 +9,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 | 1 | [structured-output-agent](./structured-output-agent/) | Converts natural-language support messages into validated `SupportTicket` objects using Pydantic schema enforcement and LLM retry logic |
 | 2 | [personal-rag-assistant](./personal-rag-assistant/) | Local RAG chatbot over personal documents (PDF, TXT, MD) with conversational memory and incremental indexing. `streamlit run streamlit_app.py` opens the same assistant in the browser |
 | 3 | [sanskrit-tts](./sanskrit-tts/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script |
-| 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question |
+| 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question. `streamlit run streamlit_app.py` opens the same agent in the browser |
 | 5 | [evidence-only-research-agent](./evidence-only-research-agent/) | Answers a question from a local folder of PDF, Markdown, and text files. Every finding quotes a stored passage, or the agent abstains |
 | 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage. `streamlit run streamlit_app.py` opens the same auditor in the browser |
 | 7 | [email-to-action-agent](./email-to-action-agent/) | Turns a pasted email or thread into a validated action list with owners, deadlines, questions, and a draft reply that does not accept commitments. `streamlit run streamlit_app.py` opens the same analyzer in the browser |
@@ -24,7 +24,7 @@ Projects 1–3 follow the flat script style in [`.agents/skills/local-python-pro
 - `python extract.py` / `python rag.py` — no servers
 - Multi-provider LLM support via `LLM_PROVIDER` env var (Gemini, Anthropic, OpenAI, Grok)
 
-[rag-agent](./rag-agent/) is a FastAPI service. [evidence-only-research-agent](./evidence-only-research-agent/), [ai-answer-auditor](./ai-answer-auditor/), and [email-to-action-agent](./email-to-action-agent/) are `src/` packages with a `cli.py`. Each of those documents its own layout in its README.
+[rag-agent](./rag-agent/) is a FastAPI service with a local Streamlit page over the same pipeline. [evidence-only-research-agent](./evidence-only-research-agent/), [ai-answer-auditor](./ai-answer-auditor/), and [email-to-action-agent](./email-to-action-agent/) are `src/` packages with a `cli.py`. Each of those documents its own layout in its README.
 
 ## Quick start (projects 1–3)
 
@@ -37,7 +37,17 @@ cp .env.example .env   # add your API key
 python <entry>.py --interactive
 ```
 
-[rag-agent](./rag-agent/) setup, the query API, and evaluation numbers are in [rag-agent/README.md](./rag-agent/README.md).
+[rag-agent](./rag-agent/) answers from PDF, TXT, and Markdown files. The page keeps that index in memory:
+
+```bash
+cd rag-agent
+py -m venv .venv
+.\.venv\Scripts\activate
+pip install -e ".[web]"
+py -m streamlit run streamlit_app.py
+```
+
+API setup, PostgreSQL, and evaluation numbers are in [rag-agent/README.md](./rag-agent/README.md).
 
 [evidence-only-research-agent](./evidence-only-research-agent/) indexes a folder, then answers from that index:
 
