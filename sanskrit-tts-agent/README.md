@@ -58,6 +58,24 @@ Or open `sanskrit_tts.ipynb` in VS Code / Cursor and select the `tts` kernel.
 python sanskrit_tts.py
 ```
 
-This writes `sanskrit_output.mp3` in the project root.
+This writes `sanskrit_output.mp3` in the project root. The script uses the same generator and default voice as the page.
+
+## Run the web UI
+
+From the project directory, with the venv activated:
+
+```powershell
+streamlit run streamlit_app.py
+```
+
+The page opens on the Gaṇeśa śloka. Paste other Devanāgarī, or load the Śānti mantra. The sidebar holds the English voice description. A blank description uses the measured, reverent default. Upload a `.txt` file when you want that file read instead of the text box.
+
+Generate plays the recitation in the browser and offers a WAV download. The first generation downloads Indic Parler-TTS. CUDA is used when it is available. The text is spoken as written. Audio stays on this machine.
+
+```powershell
+pytest -q
+```
+
+Page tests use a stand-in engine, so they do not download the model.
 
 Refer `PRD.md` for the detailed analysis

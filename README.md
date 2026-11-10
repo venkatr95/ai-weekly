@@ -8,7 +8,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 |---|---|---|
 | 1 | [structured-output-agent](./structured-output-agent/) | Converts natural-language support messages into validated `SupportTicket` objects using Pydantic schema enforcement and LLM retry logic |
 | 2 | [personal-rag-assistant](./personal-rag-assistant/) | Local RAG chatbot over personal documents (PDF, TXT, MD) with conversational memory and incremental indexing. `streamlit run streamlit_app.py` opens the same assistant in the browser |
-| 3 | [sanskrit-tts](./sanskrit-tts/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script |
+| 3 | [sanskrit-tts](./sanskrit-tts-agent/) | Local Sanskrit text-to-speech with Indic Parler-TTS — generates Devanāgarī recitation audio as `.mp3` from a notebook or script. `streamlit run streamlit_app.py` plays the same recitation in the browser |
 | 4 | [rag-agent](./rag-agent/) | FastAPI RAG service over PDF, TXT, and Markdown. Answers from retrieved chunks only, with citations, and refuses when the documents do not support the question. `streamlit run streamlit_app.py` opens the same agent in the browser |
 | 5 | [evidence-only-research-agent](./evidence-only-research-agent/) | Answers a question from a local folder of PDF, Markdown, and text files. Every finding quotes a stored passage, or the agent abstains |
 | 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage. `streamlit run streamlit_app.py` opens the same auditor in the browser |
