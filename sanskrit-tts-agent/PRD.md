@@ -14,6 +14,8 @@ Given Sanskrit text in Devanāgarī and an optional natural-language voice descr
 |----------|------|
 | `sanskrit_tts.ipynb` | Interactive load → generate → play workflow |
 | `sanskrit_tts.py` | One-shot script that writes `sanskrit_output.mp3` |
+| `sanskrit_tts_core.py` | Shared generator. The model loads on the first call |
+| `streamlit_app.py` | Browser page over the same generator |
 | `requirements.txt` | Python dependencies |
 | `README.md` | Install and run instructions |
 | Sample audio | `ganesha_sloka.mp3`, `shanti_mantra.mp3`, `sanskrit_output.mp3` |
@@ -34,6 +36,7 @@ Given Sanskrit text in Devanāgarī and an optional natural-language voice descr
 - `soundfile`
 - `accelerate`
 - `ipykernel`, `jupyter`
+- `streamlit==1.66.1`, `pytest==8.4.0`
 - `git+https://github.com/huggingface/parler-tts.git`
 
 ### Device selection
@@ -77,9 +80,10 @@ Script entrypoint:
 
 ```powershell
 python sanskrit_tts.py
+streamlit run streamlit_app.py
 ```
 
-Writes `sanskrit_output.mp3` in the project root.
+The script writes `sanskrit_output.mp3` in the project root. The page plays a WAV in the browser and offers that WAV as a download. Both call `generate` on the shared engine. The text is not rewritten. An empty text box does not load the model.
 
 ## Notebook flow
 
@@ -130,6 +134,8 @@ Writes `sanskrit_output.mp3` in the project root.
 - [ ] Gaṇeśa example writes `ganesha_sloka.mp3` and plays in the notebook
 - [ ] Śānti example writes `shanti_mantra.mp3` and plays in the notebook
 - [ ] `python sanskrit_tts.py` writes `sanskrit_output.mp3`
+- [ ] `streamlit run streamlit_app.py` plays a recitation and downloads a WAV
+- [ ] The page and the script share one generator and the default voice
 - [ ] Generation completes on CPU
 - [ ] CUDA is used when available
 - [ ] README matches actual install and run steps
