@@ -1,0 +1,149 @@
+{
+  "comparison_id": "comparison_001",
+  "documents": {
+    "previous": {
+      "document_id": "previous",
+      "filename": "employment_v1.md",
+      "path": "examples/documents/employment_v1.md",
+      "file_type": "md",
+      "page_count": null
+    },
+    "updated": {
+      "document_id": "updated",
+      "filename": "employment_v2.md",
+      "path": "examples/documents/employment_v2.md",
+      "file_type": "md",
+      "page_count": null
+    }
+  },
+  "summary": {
+    "total_changes": 3,
+    "added": 0,
+    "removed": 0,
+    "modified": 3,
+    "moved": 0,
+    "formatting_only": 0,
+    "critical": 0,
+    "high": 2,
+    "medium": 1,
+    "low": 0,
+    "informational": 0
+  },
+  "changes": [
+    {
+      "change_id": "CH001",
+      "change_type": "modified",
+      "categories": [
+        "financial",
+        "numerical"
+      ],
+      "importance": "medium",
+      "importance_reason": "A monetary amount changed by at least 5%.",
+      "section": "Compensation",
+      "previous_section": "Compensation",
+      "updated_section": "Compensation",
+      "title": "Compensation: € increased",
+      "previous_text": "Annual salary: €60,000.",
+      "updated_text": "Annual salary: €65,000.",
+      "explanation": "The value changed from 60000.0 to 65000.0 €. Absolute difference: 5000.0. Percentage difference: 8.33%.",
+      "impact": "The updated figure is higher than before; confirm whether that matches the intended terms.",
+      "recommendation": "Skim this change and confirm it matches the intended update.",
+      "previous_page": null,
+      "updated_page": null,
+      "previous_document_id": "previous",
+      "updated_document_id": "updated",
+      "numerical": {
+        "kind": "currency",
+        "previous_value": 60000.0,
+        "updated_value": 65000.0,
+        "unit": null,
+        "currency": "€",
+        "absolute_difference": 5000.0,
+        "percentage_difference": 8.33,
+        "direction": "increased"
+      },
+      "formatting_only": false,
+      "evidence_validated": true
+    },
+    {
+      "change_id": "CH002",
+      "change_type": "modified",
+      "categories": [
+        "dates_deadlines",
+        "legal_contractual",
+        "numerical"
+      ],
+      "importance": "high",
+      "importance_reason": "A time period changed by a large amount.",
+      "section": "Notice Period",
+      "previous_section": "Notice Period",
+      "updated_section": "Notice Period",
+      "title": "Notice Period: days increased",
+      "previous_text": "Either party may terminate this agreement by giving 30 days written notice.",
+      "updated_text": "Either party may terminate this agreement by giving 90 days written notice.",
+      "explanation": "The value changed from 30.0 to 90.0 day. Absolute difference: 60.0. Percentage difference: 200.0%.",
+      "impact": "The updated figure is higher than before; confirm whether that matches the intended terms.",
+      "recommendation": "Review the change in 'Notice Period' before relying on the updated document.",
+      "previous_page": null,
+      "updated_page": null,
+      "previous_document_id": "previous",
+      "updated_document_id": "updated",
+      "numerical": {
+        "kind": "value",
+        "previous_value": 30.0,
+        "updated_value": 90.0,
+        "unit": "day",
+        "currency": null,
+        "absolute_difference": 60.0,
+        "percentage_difference": 200.0,
+        "direction": "increased"
+      },
+      "formatting_only": false,
+      "evidence_validated": true
+    },
+    {
+      "change_id": "CH003",
+      "change_type": "modified",
+      "categories": [
+        "numerical",
+        "access_permissions",
+        "personnel"
+      ],
+      "importance": "high",
+      "importance_reason": "A numerical value changed substantially.",
+      "section": "Remote Work",
+      "previous_section": "Remote Work",
+      "updated_section": "Remote Work",
+      "title": "Remote Work: days decreased",
+      "previous_text": "The employee may work remotely up to three days per week, subject to business needs.",
+      "updated_text": "The employee may work remotely up to one day per week, subject to business needs.",
+      "explanation": "The value changed from 3.0 to 1.0 day. Absolute difference: -2.0. Percentage difference: -66.67%.",
+      "impact": "The updated figure is lower than before; confirm whether that matches the intended terms.",
+      "recommendation": "Review the change in 'Remote Work' before relying on the updated document.",
+      "previous_page": null,
+      "updated_page": null,
+      "previous_document_id": "previous",
+      "updated_document_id": "updated",
+      "numerical": {
+        "kind": "value",
+        "previous_value": 3.0,
+        "updated_value": 1.0,
+        "unit": "day",
+        "currency": null,
+        "absolute_difference": -2.0,
+        "percentage_difference": -66.67,
+        "direction": "decreased"
+      },
+      "formatting_only": false,
+      "evidence_validated": true
+    }
+  ],
+  "review_recommendations": [
+    "Review the change in 'Notice Period' before relying on the updated document.",
+    "Review the change in 'Remote Work' before relying on the updated document.",
+    "Skim this change and confirm it matches the intended update."
+  ],
+  "warnings": [],
+  "provider": "heuristic",
+  "disclaimer": "This report identifies textual differences and explains possible practical implications for human review. It is not legal, financial, or professional advice, and it does not determine whether a change is valid or enforceable."
+}
