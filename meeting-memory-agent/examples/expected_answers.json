@@ -1,0 +1,23 @@
+{
+  "question": "Who agreed to deliver the API and by when?",
+  "corpus": "examples/meetings/planning_transcript.txt",
+  "answer": "Alex agreed to deliver the API implementation by December 5.",
+  "evidence": [
+    {
+      "meeting_title": "API Integration Planning",
+      "speaker": "Alex",
+      "timestamp_start": 158.0,
+      "timestamp_end": null,
+      "quote": "Yes, I'll deliver the API implementation by December 5."
+    }
+  ],
+  "related_commitments": [
+    {
+      "owner": "John",
+      "action": "Handle the database migration",
+      "deadline": null
+    }
+  ],
+  "unresolved_questions_contain": ["OAuth", "API keys"],
+  "not_evidence": ["I can take responsibility for the API implementation."]
+}

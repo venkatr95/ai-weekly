@@ -14,6 +14,7 @@ A collection of local Python AI agents and tools. Each project is self-contained
 | 6 | [ai-answer-auditor](./ai-answer-auditor/) | Checks an AI-generated answer against the sources supplied with it. Splits the answer into claims, assigns a status to each one, and quotes the supporting or contradicting passage. `streamlit run streamlit_app.py` opens the same auditor in the browser |
 | 7 | [email-to-action-agent](./email-to-action-agent/) | Turns a pasted email or thread into a validated action list with owners, deadlines, questions, and a draft reply that does not accept commitments. `streamlit run streamlit_app.py` opens the same analyzer in the browser |
 | 8 | [personal-document-change-detector](./personal-document-change-detector/) | Compares two document versions (PDF, DOCX, TXT, Markdown), classifies meaningful changes, and explains review priorities. `streamlit run streamlit_app.py` opens the same comparator in the browser |
+| 9 | [meeting-memory-agent](./meeting-memory-agent/) | Turns meeting transcripts and recordings into a searchable record of decisions, commitments, and unresolved questions. Answers cite the meeting, speaker, and timestamp, or abstain |
 
 ## Style
 
@@ -25,7 +26,7 @@ Projects 1–3 follow the flat script style in [`.agents/skills/local-python-pro
 - `python extract.py` / `python rag.py` — no servers
 - Multi-provider LLM support via `LLM_PROVIDER` env var (Gemini, Anthropic, OpenAI, Grok)
 
-[rag-agent](./rag-agent/) is a FastAPI service with a local Streamlit page over the same pipeline. [evidence-only-research-agent](./evidence-only-research-agent/), [ai-answer-auditor](./ai-answer-auditor/), [email-to-action-agent](./email-to-action-agent/), and [personal-document-change-detector](./personal-document-change-detector/) are `src/` packages with a `cli.py`. Each of those documents its own layout in its README.
+[rag-agent](./rag-agent/) is a FastAPI service with a local Streamlit page over the same pipeline. [evidence-only-research-agent](./evidence-only-research-agent/), [ai-answer-auditor](./ai-answer-auditor/), [email-to-action-agent](./email-to-action-agent/), [personal-document-change-detector](./personal-document-change-detector/), and [meeting-memory-agent](./meeting-memory-agent/) are `src/` packages with a `cli.py`. Each of those documents its own layout in its README.
 
 ## Quick start (projects 1–3)
 
@@ -80,6 +81,17 @@ py -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
 python cli.py analyze --input examples/launch_thread.txt
+```
+
+[meeting-memory-agent](./meeting-memory-agent/) indexes transcripts, then answers from that record. It runs offline:
+
+```bash
+cd meeting-memory-agent
+py -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+python cli.py ingest examples/meetings
+python cli.py ask "Who agreed to deliver the API and by when?"
 ```
 
 [personal-document-change-detector](./personal-document-change-detector/) compares two document versions and explains meaningful changes. The default provider is offline:

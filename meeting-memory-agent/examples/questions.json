@@ -1,0 +1,73 @@
+[
+  {
+    "id": "who-and-when",
+    "question": "Who agreed to deliver the API and by when?",
+    "abstain": false,
+    "answer_contains": [
+      "Alex agreed to deliver the API implementation by December 12",
+      "2026-12-05",
+      "explicit commitment"
+    ],
+    "evidence_contains": ["December 12", "December 5"],
+    "speaker": "Alex",
+    "meeting": "Sprint Review",
+    "timestamp": "00:01:05"
+  },
+  {
+    "id": "authentication-decision",
+    "question": "What did we decide about authentication?",
+    "abstain": false,
+    "answer_contains": ["OAuth", "Explicit decision"],
+    "answer_excludes": ["API keys"],
+    "evidence_contains": ["authentication will use OAuth"]
+  },
+  {
+    "id": "unresolved",
+    "question": "Which questions remain unresolved?",
+    "abstain": false,
+    "answer_contains": ["deployment"],
+    "answer_excludes": ["API keys"]
+  },
+  {
+    "id": "john-tasks",
+    "question": "Which tasks belong to John?",
+    "abstain": false,
+    "answer_contains": ["John", "database migration"],
+    "evidence_contains": ["database migration"]
+  },
+  {
+    "id": "previous-meeting",
+    "question": "What did the team agree in the previous meeting?",
+    "abstain": false,
+    "answer_contains": ["API Integration Planning", "December 5", "Alex"],
+    "answer_excludes": ["December 12", "I can take responsibility"]
+  },
+  {
+    "id": "changed-plan",
+    "question": "Did the team change the API delivery plan?",
+    "abstain": false,
+    "answer_contains": ["Alex", "2026-12-05", "2026-12-12"],
+    "evidence_contains": ["instead of December 5"]
+  },
+  {
+    "id": "abstain-mobile",
+    "question": "What did we decide about the mobile app?",
+    "abstain": true,
+    "answer_excludes": ["OAuth"]
+  },
+  {
+    "id": "inferred-notes",
+    "question": "Who will update the release notes?",
+    "abstain": false,
+    "answer_contains": ["inferred", "Sarah"],
+    "answer_excludes": ["explicit commitment"],
+    "speaker": "Sarah"
+  },
+  {
+    "id": "authentication-settled",
+    "question": "What remains unresolved about authentication?",
+    "abstain": false,
+    "answer_contains": ["No unresolved questions"],
+    "answer_excludes": ["OAuth or API keys"]
+  }
+]

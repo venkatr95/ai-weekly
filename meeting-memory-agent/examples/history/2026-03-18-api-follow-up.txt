@@ -1,0 +1,9 @@
+# Meeting: API follow-up
+# Date: 2026-03-18
+# Participants: Alex, Priya, Jordan, Sam
+
+[00:00:40] Alex: I will deliver the API by March 27 instead of March 20.
+[00:01:15] Priya: We agreed that the database remains Postgres.
+[00:01:50] Jordan: I will own the staging checklist by March 25.
+[00:02:30] Sam: The schema review is still unresolved.
+[00:03:10] Priya: The migration notes are done.

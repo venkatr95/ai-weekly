@@ -1,0 +1,71 @@
+[
+  {
+    "id": "who-api",
+    "question": "Who agreed to deliver the API?",
+    "abstain": false,
+    "answer_contains": ["Alex", "explicit"],
+    "evidence_contains": ["I will deliver the API"],
+    "speaker": "Alex"
+  },
+  {
+    "id": "when-api",
+    "question": "When is the API expected to be ready?",
+    "abstain": false,
+    "answer_contains": ["2026-03-27", "2026-03-20"],
+    "evidence_contains": ["March 27", "March 20"]
+  },
+  {
+    "id": "database-decisions",
+    "question": "What decisions were made about the database?",
+    "abstain": false,
+    "answer_contains": ["Postgres", "explicit"],
+    "evidence_contains": ["Postgres"]
+  },
+  {
+    "id": "who-deployment",
+    "question": "Who owns the deployment?",
+    "abstain": false,
+    "answer_contains": ["Alex", "explicit"],
+    "evidence_contains": ["I own the deployment"],
+    "speaker": "Alex",
+    "meeting": "API planning",
+    "timestamp": "00:02:18"
+  },
+  {
+    "id": "unresolved",
+    "question": "Which questions remain unresolved?",
+    "abstain": false,
+    "answer_contains": ["schema review"],
+    "answer_excludes": ["Who owns the deployment"],
+    "evidence_contains": ["schema review"]
+  },
+  {
+    "id": "previous-meeting",
+    "question": "What did the team agree in the previous meeting?",
+    "abstain": false,
+    "answer_contains": ["API planning", "Postgres", "Alex"],
+    "answer_excludes": ["2026-03-27", "runbook"],
+    "evidence_contains": ["March 20"]
+  },
+  {
+    "id": "changed-commitments",
+    "question": "Were any previous commitments changed?",
+    "abstain": false,
+    "answer_contains": ["Alex", "2026-03-20", "2026-03-27"],
+    "evidence_contains": ["instead of March 20"]
+  },
+  {
+    "id": "abstain-mobile",
+    "question": "What did we decide about the mobile app?",
+    "abstain": true,
+    "answer_excludes": ["Postgres"]
+  },
+  {
+    "id": "inferred-runbook",
+    "question": "Who will update the runbook?",
+    "abstain": false,
+    "answer_contains": ["inferred", "Sam"],
+    "answer_excludes": ["explicit commitment"],
+    "speaker": "Sam"
+  }
+]

@@ -1,0 +1,12 @@
+# Meeting: API Integration Planning
+# Date: 2026-11-20
+# Time: 10:00
+# Participants: Alex, Sarah, John
+# Language: en
+
+[00:02:14] Sarah: We need the API integration ready before the next release.
+[00:02:25] Alex: I can take responsibility for the API implementation.
+[00:02:32] Sarah: Can you have it ready by December 5?
+[00:02:38] Alex: Yes, I'll deliver the API implementation by December 5.
+[00:03:10] John: I'll handle the database migration.
+[00:03:20] Sarah: We still need to decide whether authentication will use OAuth or API keys.
