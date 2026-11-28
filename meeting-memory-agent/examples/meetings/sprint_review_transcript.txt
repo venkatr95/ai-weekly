@@ -1,0 +1,11 @@
+# Meeting: Sprint Review
+# Date: 2026-12-08
+# Participants: Alex, Sarah, John
+# Language: en
+
+[00:01:05] Alex: I will deliver the API implementation by December 12 instead of December 5.
+[00:01:40] John: The database migration is done.
+[00:02:10] Sarah: We decided that authentication will use OAuth.
+[00:02:40] Sarah: Who will own the deployment process?
+[00:03:05] Alex: I am working on the API implementation.
+[00:03:40] Sarah: Someone should update the release notes.
